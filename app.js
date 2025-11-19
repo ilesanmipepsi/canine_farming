@@ -5,7 +5,7 @@ const scopes = ['username', 'payments'];
 function onIncompletePaymentFound(payment) {
   console.log('Pending payment found:', payment.identifier);
   // Send to backend for completion or cancellation
-  fetch('/payments/complete', {
+  fetch('https://rude-jobs-shop.loca.lt', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -39,14 +39,14 @@ document.getElementById('swap').onclick = () => {
 
   const callbacks = {
     onReadyForServerApproval: (paymentId) => {
-      fetch('/payments/approve', {
+      fetch('https://rude-jobs-shop.loca.lt', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ paymentId })
       });
     },
     onReadyForServerCompletion: (paymentId, txid) => {
-      fetch('/payments/complete', {
+      fetch('https://rude-jobs-shop.loca.lt', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ paymentId, txid })
@@ -81,4 +81,5 @@ document.getElementById('stake').onclick = async () => {
 
 // Open Shop & Marketplace (placeholders)
 document.getElementById('open-shop').onclick = () => alert('Shop opened! 0.0001 $CFM entry');
+
 document.getElementById('market').onclick = () => alert('GSD Marketplace loaded');
