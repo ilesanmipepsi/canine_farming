@@ -1,85 +1,99 @@
-// app.js
+// app.js – FINAL VERSION (works in Pi Browser sandbox & production – NO localhost)
+
 const scopes = ['username', 'payments'];
 
-// Incomplete payment handler (required by Pi SDK)
+// This handles pending payments (required by Pi SDK)
 function onIncompletePaymentFound(payment) {
-  console.log('Pending payment found:', payment.identifier);
-  // Send to backend for completion or cancellation
-  fetch('https://rude-jobs-shop.loca.lt', {
+  console.log('Pending payment:', payment);
+  fetch('/payments/complete', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       paymentId: payment.identifier,
-      txid: payment.transaction.txid,
-      debug: 'cancel'  // Or 'complete' if approved
+      txid: payment.transaction?.txid || null,
+      debug: 'cancel'
     })
   });
 }
 
 // Authenticate user
-Pi.authenticate(scopes, onIncompletePaymentFound).then(function(auth) {
-  console.log('User authenticated:', auth.user.username);
-  // Store auth token for backend calls
-  const accessToken = auth.accessToken;
-  document.getElementById('username').innerText = auth.user.username;
-  document.getElementById('home').style.display = 'none';
-  document.getElementById('dashboard').style.display = 'block';
-}).catch(function(error) {
-  console.error('Authentication failed:', error);
-  alert('Connection failed: ' + error.message);
+Pi.authenticate(scopes, onIncompletePaymentFound)
+  .then(auth => {
+    document.getElementById('username').innerText = auth.user.username;
+    document.getElementById('home').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    console.log('Connected:', auth.user.username);
+  })
+  .catch(err => alert('Connect failed: ' + err.message));
+
+// ——————— SWAP 10 Pi → 0.000025 $CFM ———————
+document.querySelectorAll('#swap').forEach(btn => {
+  btn.onclick = () => {
+    const paymentData = {
+      amount: 10,
+      memo: "Canine Farming – 1 Puppy (0.000025 $CFM)",
+      metadata: { action: "buy_puppy" }
+    };
+
+    const callbacks = {
+      onReadyForServerApproval: (paymentId) => {
+        fetch('/payments/approve', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ paymentId })
+        });
+      },
+      onReadyForServerCompletion: (paymentId, txid) => {
+        fetch('/payments/complete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ paymentId, txid })
+        }).then(() => alert('Success! You now own 1 Puppy 🐶'));
+      },
+      onCancel: () => alert('Swap cancelled'),
+      onError: (error) => alert('Error: ' + error.message)
+    };
+
+    Pi.createPayment(paymentData, callbacks);
+  };
 });
 
-// Swap $10 for 0.000025 $CFM
-document.getElementById('swap').onclick = () => {
-  const paymentData = {
-    amount: 10,
-    memo: "Buy 1 Puppy (0.000025 $CFM)",
-    metadata: { type: "puppy_purchase" }
-  };
-
-  const callbacks = {
-    onReadyForServerApproval: (paymentId) => {
-      fetch('https://rude-jobs-shop.loca.lt', {
+// ——————— STAKE $CFM ———————
+document.querySelectorAll('#stake').forEach(btn => {
+  btn.onclick = async () => {
+    try {
+      const auth = await Pi.authenticate(['payments']);
+      const res = await fetch('/stake', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ paymentId })
+        body: JSON.stringify({ token: auth.accessToken })
       });
-    },
-    onReadyForServerCompletion: (paymentId, txid) => {
-      fetch('https://rude-jobs-shop.loca.lt', {
+      const data = await res.json();
+      alert(data.success ? 'Staked successfully! 400% APY active' : data.error);
+    } catch (e) { alert('Stake failed'); }
+  };
+});
+
+// ——————— CLAIM REWARDS ———————
+document.querySelectorAll('#claim')?.forEach(btn => {
+  btn.onclick = async () => {
+    try {
+      const auth = await Pi.authenticate(['payments']);
+      const res = await fetch('/claim', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ paymentId, txid })
-      }).then(() => alert('Puppy purchased! 0.000025 $CFM credited 🐶'));
-    },
-    onCancel: () => alert('Swap cancelled'),
-    onError: (error) => alert('Swap error: ' + error.message)
+        body: JSON.stringify({ token: auth.accessToken })
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert(`Claimed ${data.rewarded.toFixed(8)} $CFM!\nTotal: ${(data.total + 0.000025).toFixed(8)} $CFM${data.graduated ? '\nYou graduated to shareholder!' : ''}`);
+      } else {
+        alert(data.error);
+      }
+    } catch (e) { alert('Claim failed'); }
   };
+});
 
-  Pi.createPayment(paymentData, callbacks).then(function(payment) {
-    console.log('Payment created:', payment.id);
-  }).catch(function(error) {
-    alert('Payment creation failed: ' + error.message);
-  });
-};
-
-// Stake $CFM
-document.getElementById('stake').onclick = async () => {
-  try {
-    const auth = await Pi.authenticate(['payments']);
-    const res = await fetch('/stake', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token: auth.accessToken })
-    });
-    const data = await res.json();
-    alert(data.success ? 'Staked successfully! 400% APY active' : data.error);
-  } catch (err) {
-    alert('Staking failed: ' + err.message);
-  }
-};
-
-// Open Shop & Marketplace (placeholders)
-document.getElementById('open-shop').onclick = () => alert('Shop opened! 0.0001 $CFM entry');
-
-document.getElementById('market').onclick = () => alert('GSD Marketplace loaded');
+// Placeholder buttons
+document.getElementById('open-shop')?.addEventListener('click', () => alert('Shop coming soon!'));
+document.getElementById('market')?.addEventListener('click', () => alert('Marketplace coming soon!'));
