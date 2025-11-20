@@ -1,11 +1,11 @@
 // app.js – FINAL VERSION FOR PUBLIC BACKEND (NO localhost, NO disappearing)
 
-const BACKEND_URL = 'https://canine-farming-backend.vercel.app';   // ←←← CHANGE THIS TO YOUR REAL URL
+const BACKEND_URL = 'https://canine-farming.vercel.app';   // ←←← CHANGE THIS TO YOUR REAL URL
 
 const scopes = ['username', 'payments'];
 
 function onIncompletePaymentFound(payment) {
-  fetch(`${BACKEND_URL}/payments/complete`, {
+  fetch(`${BACKEND_URL}/api/stake`,...) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -61,3 +61,4 @@ document.querySelectorAll('#claim')?.forEach(btn => {
     } catch { alert('Claim failed'); }
   };
 });
+
