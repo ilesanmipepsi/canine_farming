@@ -24,16 +24,23 @@ Pi.authenticate(scopes, onIncompletePaymentFound)
   })
   .catch(err => alert('Connect failed: ' + err.message));
 
-// SWAP
+// SWAP – CORRECTED: $10 worth of Pi (dynamic price)
 document.querySelectorAll('#swap').forEach(btn => {
   btn.onclick = () => {
-    const paymentData = { amount: 10, memo: "1 Puppy (0.000025 $CFM)", metadata: { action: "buy" } };
+    // $10 USD in Pi (Pi’s SDK automatically converts USD → Pi amount)
+    const paymentData = {
+      amount: 10,                  // ← this is $10 USD, NOT 10 Pi
+      memo: "Canine Farming – 1 Puppy (0.000025 $CFM)",
+      metadata: { action: "buy_puppy" }
+    };
+
     const callbacks = {
-      onReadyForServerApproval: (paymentId) => fetch(`${BACKEND_URL}/payments/approve`, { method: 'POST', body: JSON.stringify({ paymentId }) }),
-      onReadyForServerCompletion: (paymentId, txid) => fetch(`${BACKEND_URL}/payments/complete`, { method: 'POST', body: JSON.stringify({ paymentId, txid }) }).then(() => alert('Puppy claimed! 🐶')),
-      onCancel: () => alert('Cancelled'),
+      onReadyForServerApproval: (paymentId) => fetch(`${BACKEND_URL}/api/payments/approve`, { method: 'POST', body: JSON.stringify({ paymentId }) }),
+      onReadyForServerCompletion: (paymentId, txid) => fetch(`${BACKEND_URL}/api/payments/complete`, { method: 'POST', body: JSON.stringify({ paymentId, txid }) }).then(() => alert('Success! You received 1 Puppy 🐶')),
+      onCancel: () => alert('Swap cancelled'),
       onError: (e) => alert('Error: ' + e.message)
     };
+
     Pi.createPayment(paymentData, callbacks);
   };
 });
@@ -61,4 +68,5 @@ document.querySelectorAll('#claim')?.forEach(btn => {
     } catch { alert('Claim failed'); }
   };
 });
+
 
