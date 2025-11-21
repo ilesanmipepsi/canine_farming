@@ -1,6 +1,6 @@
 const BACKEND_URL = 'https://canine-farming.vercel.app';  // Your exact Vercel URL
 
-const scopes = ['username', 'payments'];
+const scopes = ['username', 'payments', 'wallet_address'];
 
 // Handle incomplete payments
 function onIncompletePaymentFound(payment) {
@@ -64,3 +64,4 @@ document.querySelectorAll('#claim').forEach(btn => {
     } catch { alert('Claim failed'); }
   };
 });
+
