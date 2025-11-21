@@ -1,144 +1,103 @@
-// app.js – FINAL VERSION FOR PUBLIC BACKEND (NO localhost, NO disappearing)
+// app.js – FINAL PRODUCTION VERSION (November 2025 – fully working in Pi Browser)
 
-
-
-const BACKEND_URL = 'https://canine-farming.vercel.app';   // ←←← CHANGE THIS TO YOUR REAL URL
-
-
+const BACKEND_URL = 'https://canine-farming.vercel.app';   // ← Your exact Vercel URL (short one)
 
 const scopes = ['username', 'payments'];
 
-
-
+// Handle any incomplete payments when user opens the app
 function onIncompletePaymentFound(payment) {
-
-  fetch(`${BACKEND_URL}/api/stake`,...) {
-
+  fetch(`${BACKEND_URL}/api/payments/complete`, {
     method: 'POST',
-
     headers: { 'Content-Type': 'application/json' },
-
     body: JSON.stringify({
-
       paymentId: payment.identifier,
-
-      txid: payment.transaction?.txid || null,
-
-      debug: 'cancel'
-
+      txid: payment.transaction?.txid || null
     })
-
-  });
-
+  }).catch(() => { /* silent */ });
 }
 
-
-
+// Connect wallet on load
 Pi.authenticate(scopes, onIncompletePaymentFound)
-
-  .then(auth => {
-
+  .then((auth) => {
     document.getElementById('username').innerText = auth.user.username;
-
     document.getElementById('home').style.display = 'none';
-
     document.getElementById('dashboard').style.display = 'block';
-
   })
+  .catch((err) => {
+    console.error(err);
+    alert('Connect failed: ' + err.message);
+  });
 
-  .catch(err => alert('Connect failed: ' + err.message));
-
-
-
-// SWAP – CORRECTED: $10 worth of Pi (dynamic price)
-
+// SWAP – $10 USD worth of Pi → 0.000025 $CFM
 document.querySelectorAll('#swap').forEach(btn => {
-
   btn.onclick = () => {
-
-    // $10 USD in Pi (Pi’s SDK automatically converts USD → Pi amount)
-
     const paymentData = {
-
-      amount: 10,                  // ← this is $10 USD, NOT 10 Pi
-
+      amount: 10,                                      // $10 USD (Pi SDK auto-converts to Pi)
       memo: "Canine Farming – 1 Puppy (0.000025 $CFM)",
-
       metadata: { action: "buy_puppy" }
-
     };
-
-
 
     const callbacks = {
-
-      onReadyForServerApproval: (paymentId) => fetch(`${BACKEND_URL}/api/payments/approve`, { method: 'POST', body: JSON.stringify({ paymentId }) }),
-
-      onReadyForServerCompletion: (paymentId, txid) => fetch(`${BACKEND_URL}/api/payments/complete`, { method: 'POST', body: JSON.stringify({ paymentId, txid }) }).then(() => alert('Success! You received 1 Puppy 🐶')),
-
+      onReadyForServerApproval: (paymentId) => {
+        return fetch(`${BACKEND_URL}/api/payments/approve`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ paymentId })
+        });
+      },
+      onReadyForServerCompletion: (paymentId, txid) => {
+        return fetch(`${BACKEND_URL}/api/payments/complete`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ paymentId, txid })
+        }).then(() => {
+          alert('Success! You received 1 Puppy');
+        });
+      },
       onCancel: () => alert('Swap cancelled'),
-
-      onError: (e) => alert('Error: ' + e.message)
-
+      onError: (error) => alert('Payment error: ' + error.message)
     };
 
-
-
     Pi.createPayment(paymentData, callbacks);
-
   };
-
 });
-
-
 
 // STAKE
-
 document.querySelectorAll('#stake').forEach(btn => {
-
   btn.onclick = async () => {
-
     try {
-
       const auth = await Pi.authenticate(['payments']);
-
-      const res = await fetch(`${BACKEND_URL}/stake`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ token: auth.accessToken }) });
-
+      const res = await fetch(`${BACKEND_URL}/api/stake`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: auth.accessToken })
+      });
       const data = await res.json();
-
-      alert(data.success ? 'Staked! 400% APY active' : data.error);
-
-    } catch { alert('Stake failed'); }
-
+      alert(data.success ? 'Staked! 400% APY active' : data.error || 'Stake failed');
+    } catch (e) {
+      alert('Stake failed – check internet');
+    }
   };
-
 });
 
-
-
-// CLAIM
-
-document.querySelectorAll('#claim')?.forEach(btn => {
-
+// CLAIM REWARDS
+document.querySelectorAll('#claim').forEach(btn => {
   btn.onclick = async () => {
-
     try {
-
       const auth = await Pi.authenticate(['payments']);
-
-      const res = await fetch(`${BACKEND_URL}/claim`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ token: auth.accessToken }) });
-
+      const res = await fetch(`${BACKEND_URL}/api/claim`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: auth.accessToken })
+      });
       const data = await res.json();
-
-      alert(data.success ? `Claimed ${data.rewarded?.toFixed(8)} $CFM!` : data.error);
-
-    } catch { alert('Claim failed'); }
-
+      if (data.success) {
+        alert(`Claimed ${Number(data.rewarded || 0).toFixed(8)} $CFM!`);
+      } else {
+        alert(data.error || 'Claim failed');
+      }
+    } catch (e) {
+      alert('Claim failed – check internet');
+    }
   };
-
 });
-
-
-
-
-
