@@ -92,15 +92,31 @@
 
   </div>
 
-  <!-- Pi SDK -->
+    <!-- Pi SDK with ready check -->
   <script src="https://sdk.minepi.com/pi-sdk.js"></script>
   <script>
-    // USE sandbox: true → only for testing in sandbox
-    // CHANGE TO sandbox: false → when Step 10 is green and you want REAL transactions
-    Pi.init({ version: "2.0", sandbox: false });
+    // Wait until Pi SDK is fully loaded before doing anything
+    window.onPiSDKReady = function() {
+      Pi.init({ version: "2.0", sandbox: false });   // real production mode
+
+      // Now trigger connect automatically OR when button is clicked
+      document.getElementById('connect')?.addEventListener('click', () => {
+        const scopes = ['username', 'payments'];
+        Pi.authenticate(scopes, onIncompletePaymentFound)
+          .then(auth => {
+            document.getElementById('username').innerText = auth.user.username;
+            document.getElementById('home').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+          })
+          .catch(err => alert('Connect failed: ' + err.message));
+      });
+
+      // Optional: auto-connect if user was already logged in
+      Pi.authenticate(scopes, onIncompletePaymentFound).catch(() => {});
+    };
   </script>
 
-  <!-- Your logic -->
   <script src="app.js"></script>
 </body>
 </html>
+
