@@ -1,4 +1,4 @@
-const BACKEND_URL = 'https://canine-farming.vercel.app';  // Your Vercel URL
+const BACKEND_URL = 'https://canine-farming.vercel.app';  // ← Your Vercel URL (short one)
 
 const scopes = ['username', 'payments', 'wallet_address'];
 
@@ -19,6 +19,10 @@ function onIncompletePaymentFound(payment) {
 
 // CONNECT WALLET
 document.getElementById('connect')?.addEventListener('click', () => {
+  const connectBtn = document.getElementById('connect');
+  connectBtn.disabled = true;
+  connectBtn.innerText = 'Connecting...';
+
   Pi.authenticate(scopes, onIncompletePaymentFound)
     .then(auth => {
       document.getElementById('username').innerText = auth.user.username;
@@ -28,14 +32,28 @@ document.getElementById('connect')?.addEventListener('click', () => {
     .catch(err => {
       console.error('Connect failed:', err);
       alert('Connect failed: ' + (err.message || 'Please try again'));
+    })
+    .finally(() => {
+      connectBtn.disabled = false;
+      connectBtn.innerText = 'Connect Pi Wallet';
     });
 });
 
 // SWAP
 document.querySelectorAll('#swap').forEach(btn => {
   btn.onclick = () => {
-    btn.disabled = true; // Prevent double-click
+    btn.disabled = true;
     btn.innerText = 'Processing...';
+
+    // Clean up any stuck pending payments (fixes "Failed to check a pending payment")
+    Pi.getPendingPayments()
+      .then(pending => {
+        if (pending.length > 0) {
+          console.log('Clearing pending payments...');
+          pending.forEach(p => Pi.cancelPayment(p.identifier));
+        }
+      })
+      .catch(() => {});
 
     Pi.createPayment({
       amount: 10,
@@ -43,32 +61,40 @@ document.querySelectorAll('#swap').forEach(btn => {
       metadata: { action: "buy_puppy" }
     }, {
       onReadyForServerApproval: (pid) => {
+        console.log('Requesting server approval for payment:', pid);
         return fetch(`${BACKEND_URL}/api/payments/approve`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ paymentId: pid })
         })
-        .then(res => res.json())
+        .then(res => {
+          if (!res.ok) throw new Error('Approval failed');
+          return res.json();
+        })
         .catch(err => {
           console.error('Approval error:', err);
-          alert('Approval failed – please try again');
+          throw err;
         });
       },
       onReadyForServerCompletion: (pid, txid) => {
+        console.log('Completing payment:', pid, txid);
         return fetch(`${BACKEND_URL}/api/payments/complete`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ paymentId: pid, txid })
         })
-        .then(res => res.json())
-        .then(data => {
+        .then(res => {
+          if (!res.ok) throw new Error('Completion failed');
+          return res.json();
+        })
+        .then(() => {
           alert('Success! You received 1 Puppy 🐶');
-          btn.disabled = false;
-          btn.innerText = 'Swap $10 for 0.000025 $CFM';
         })
         .catch(err => {
           console.error('Completion error:', err);
           alert('Completion failed – check your wallet');
+        })
+        .finally(() => {
           btn.disabled = false;
           btn.innerText = 'Swap $10 for 0.000025 $CFM';
         });
@@ -103,7 +129,7 @@ document.querySelectorAll('#stake').forEach(btn => {
       const data = await res.json();
       alert(data.success ? 'Staked! 400% APY active' : data.error || 'Stake failed');
     } catch (e) {
-      alert('Stake failed – check internet');
+      alert('Stake failed – check internet or wallet');
     } finally {
       btn.disabled = false;
       btn.innerText = 'Stake $CFM';
@@ -126,7 +152,7 @@ document.querySelectorAll('#claim').forEach(btn => {
       const data = await res.json();
       alert(data.success ? `Claimed ${(data.rewarded||0).toFixed(8)} $CFM!` : data.error || 'Claim failed');
     } catch (e) {
-      alert('Claim failed – check internet');
+      alert('Claim failed – check internet or wallet');
     } finally {
       btn.disabled = false;
       btn.innerText = 'Claim Rewards';
