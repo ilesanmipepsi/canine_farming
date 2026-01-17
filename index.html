@@ -32,6 +32,7 @@
     .button.shop    { background: #8b5e3c; }
     .button.market  { background: #d4a017; }
     .button.claim   { background: #ea4335; }
+    .button.test    { background: #ff9800; }
     .info { background: white; padding: 16px; border-radius: 10px; margin: 12px 0; box-shadow: 0 3px 10px rgba(0,0,0,0.1); }
     #dashboard { display: none; }
   </style>
@@ -44,23 +45,24 @@
       <p>Build Your GSD Empire – 400% APY</p>
     </div>
 
-    <!-- HOME SCREEN -->
+    <!-- HOME SCREEN (before connect) -->
     <div id="home">
       <div class="info"><p>Join the German Shepherd Dog revolution</p></div>
       <button id="connect" class="button">Connect Pi Wallet</button>
+      <button id="test-buy" class="button test">Test Buy 0.1 Pi (Step 10)</button>
       <button id="swap" class="button">Swap $10 for 0.000025 $CFM</button>
-      <button id="test-buy" class="button" style="background: #ff9800;">Test Buy 0.1 Pi (Step 10)</button>
       <button id="open-shop" class="button shop">Open Shop</button>
       <button id="market" class="button market">Marketplace</button>
       <button id="stake" class="button stake">Stake $CFM</button>
     </div>
 
-    <!-- DASHBOARD -->
+    <!-- DASHBOARD (after connect) -->
     <div id="dashboard">
       <div class="info">
         <h2>Welcome, <span id="username">Pioneer</span>!</h2>
         <p>Your GSD Kennel is growing</p>
       </div>
+      <button id="test-buy" class="button test">Test Buy 0.1 Pi (Step 10)</button>
       <button id="swap" class="button">Swap $10 for 0.000025 $CFM</button>
       <button id="open-shop" class="button shop">Open Shop</button>
       <button id="market" class="button market">Marketplace</button>
@@ -87,4 +89,3 @@
   <script src="app.js"></script>
 </body>
 </html>
-
