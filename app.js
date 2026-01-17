@@ -1,60 +1,66 @@
-const handleTestBuy = async (e) => {
-  if (!currentUser) return alert("Connect Wallet First!");
-  
-  const btn = e.target;
-  btn.disabled = true;
-  btn.innerText = 'Initializing Wallet...';
+// Change to 'false' if testing on phone inside the Pi Browser
+const isSandbox = true; 
+const BACKEND_URL = 'https://canine-farming.vercel.app';
 
+// 1. Initialize carefully
+try {
+  Pi.init({ version: "2.0", sandbox: isSandbox });
+} catch (e) {
+  console.error("SDK already initialized or failed:", e);
+}
+
+let currentUser = null;
+
+// This function unlocks all buttons after a successful login
+const unlockApp = (user) => {
+  currentUser = user;
+  document.getElementById('username').innerText = user.username;
+  document.getElementById('home').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
+  console.log("App unlocked for:", user.username);
+};
+
+// CONNECT BUTTON
+document.getElementById('connect').onclick = async () => {
   try {
-    // MANDATORY 2026 STEP: Check for and cancel "Ghost" payments
-    const pending = await Pi.getPendingPayments();
-    if (pending.length > 0) {
-      console.log('Cancelling pending transactions...');
-      await Promise.all(pending.map(p => Pi.cancelPayment(p.identifier)));
-    }
-
-    // Trigger the actual Wallet UI
-    Pi.createPayment({
-      amount: 0.1,
-      memo: "Step 10 Verification",
-      metadata: { action: "test_buy" }
-    }, {
-      onReadyForServerApproval: async (paymentId) => {
-        console.log('Server approval started for:', paymentId);
-        const response = await fetch(`${BACKEND_URL}/api/payments/approve`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ paymentId })
-        });
-        
-        if (!response.ok) throw new Error("Backend failed to approve with Pi API");
-        return response.json();
-      },
-      onReadyForServerCompletion: async (paymentId, txid) => {
-        await fetch(`${BACKEND_URL}/api/payments/complete`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ paymentId, txid })
-        });
-        alert('Payment Success! Checklist Step 10 should turn green.');
-        btn.disabled = false;
-        btn.innerText = 'Test Buy 0.1 Pi';
-      },
-      onCancel: (paymentId) => {
-        console.log('User cancelled:', paymentId);
-        btn.disabled = false;
-        btn.innerText = 'Test Buy 0.1 Pi';
-      },
-      onError: (error, paymentId) => {
-        console.error('Wallet UI Error:', error);
-        alert('Wallet failed to open. Check your browser console.');
-        btn.disabled = false;
-        btn.innerText = 'Retry Test Buy';
-      }
+    const auth = await Pi.authenticate(['username', 'payments'], (payment) => {
+      // Automatic recovery for stuck payments
+      fetch(`${BACKEND_URL}/api/payments/complete`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ paymentId: payment.identifier, txid: payment.transaction.txid })
+      });
     });
+    unlockApp(auth.user);
   } catch (err) {
-    console.error('Payment Flow Error:', err);
-    btn.disabled = false;
-    btn.innerText = 'Fix Error';
+    alert("Connection failed. Did you Authorize Sandbox on your phone?");
   }
+};
+
+// TEST BUY BUTTON
+document.getElementById('test-buy').onclick = () => {
+  if (!currentUser) return alert("Please Connect Wallet first!");
+
+  Pi.createPayment({
+    amount: 0.1,
+    memo: "Step 10 Verification",
+    metadata: { action: "test_buy" }
+  }, {
+    onReadyForServerApproval: (pid) => {
+      return fetch(`${BACKEND_URL}/api/payments/approve`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ paymentId: pid })
+      }).then(res => res.json());
+    },
+    onReadyForServerCompletion: (pid, txid) => {
+      return fetch(`${BACKEND_URL}/api/payments/complete`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ paymentId: pid, txid })
+      }).then(() => alert("Success! Checklist Step 10 is now clear."));
+    },
+    onCancel: (pid) => console.log("Cancelled", pid),
+    onError: (err) => alert("Wallet Error: " + err.message)
+  });
 };
