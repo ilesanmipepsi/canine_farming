@@ -16,26 +16,24 @@ const APY = 4.0;
 const MIN_HOLDING = 0.000025;
 const STAKES = {};  // uid → { startDate, claimedQuarters, totalClaimed, active, swapped }
 
-// === NEW: Pi SDK Payment Endpoints (fixes timeout) ===
+// === NEW: Pi SDK Payment Endpoints (fixes "Payment Expired" timeout) ===
 
-// Instant approval response (prevents "Payment Expired")
+// Instant approval (respond <5 seconds to prevent SDK timeout)
 app.post('/payments/approve', (req, res) => {
   const { paymentId } = req.body;
-
   console.log('Pi SDK requesting approval for payment:', paymentId);
 
-  // Respond IMMEDIATELY to stop Pi SDK timeout
+  // Respond IMMEDIATELY
   res.status(200).json({ success: true });
 });
 
 // Completion callback (called after user approves in Pi app)
 app.post('/payments/complete', async (req, res) => {
   const { paymentId, txid } = req.body;
-
   console.log('Pi SDK payment completed:', { paymentId, txid });
 
   try {
-    // Verify payment with Pi API (optional but recommended)
+    // Optional: Verify payment with Pi API
     const paymentVerification = await axios.get(`${BASE_URL}/payments/${paymentId}`, {
       headers: { Authorization: `Bearer ${API_KEY}` }
     });
@@ -44,11 +42,11 @@ app.post('/payments/complete', async (req, res) => {
       return res.status(400).json({ error: 'Payment not completed' });
     }
 
-    // Credit 0.000025 $CFM to user (use your real transfer logic here)
-    const uid = paymentVerification.data.user.uid;  // Get user from payment
+    // Credit 0.000025 $CFM (use your real transfer logic)
+    const uid = paymentVerification.data.user.uid; // Get user from payment
     await transferCFM(uid, 0.000025, 'Swap reward');
 
-    // Mark as swapped (if not already)
+    // Mark as swapped
     if (!STAKES[uid]?.swapped) {
       STAKES[uid] = { ...STAKES[uid], swapped: true };
     }
@@ -62,7 +60,7 @@ app.post('/payments/complete', async (req, res) => {
   }
 });
 
-// === Existing endpoints (unchanged for now) ===
+// === Your existing endpoints (unchanged) ===
 app.post('/swap', async (req, res) => {
   const { token } = req.body;
   const user = await verifyUser(token);
@@ -132,7 +130,7 @@ app.post('/claim', async (req, res) => {
   res.json({ success: true, rewarded: reward, total: staker.totalClaimed + 0.000025, graduated: !staker.active });
 });
 
-// Mock helpers (replace with real Pi API calls later)
+// Mock helpers (replace with real Pi API later)
 async function verifyUser(token) {
   try {
     const res = await axios.post(`${BASE_URL}/auth/verify`, { token }, {
