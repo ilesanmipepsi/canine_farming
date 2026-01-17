@@ -1,52 +1,55 @@
+// Change this to 'true' only when testing in a desktop browser. 
+// Set to 'false' for the final test inside the Pi Browser on your phone.
+const isSandbox = true; 
+
 const BACKEND_URL = 'https://canine-farming.vercel.app'; 
 const scopes = ['username', 'payments', 'wallet_address'];
 
-// 1. Initialize immediately
-Pi.init({ version: "2.0", sandbox: false });
+// 1. Initialize immediately with the correct flag
+Pi.init({ version: "2.0", sandbox: isSandbox });
 
-// Global user variable to check auth status
 let currentUser = null;
 
-// Handle incomplete payments
-function onIncompletePaymentFound(payment) {
-  console.log('Incomplete payment found, resolving...');
-  fetch(`${BACKEND_URL}/api/payments/complete`, {
+// Mandatory recovery function for incomplete payments
+async function onIncompletePaymentFound(payment) {
+  console.log('Resolving incomplete payment:', payment.identifier);
+  await fetch(`${BACKEND_URL}/api/payments/complete`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      paymentId: payment.identifier,
-      txid: payment.transaction?.txid || null
-    })
-  }).catch(err => console.error('Recovery failed:', err));
+    body: JSON.stringify({ paymentId: payment.identifier, txid: payment.transaction?.txid })
+  });
 }
 
-// CONNECT WALLET
-document.getElementById('connect')?.addEventListener('click', () => {
-  Pi.authenticate(scopes, onIncompletePaymentFound)
-    .then(auth => {
-      currentUser = auth.user;
-      document.getElementById('username').innerText = auth.user.username;
-      document.getElementById('home').style.display = 'none';
-      document.getElementById('dashboard').style.display = 'block';
-    })
-    .catch(err => alert('Auth failed: ' + err.message));
-});
-
-// TEST BUY BUTTON logic
-const handleTestBuy = async (e) => {
-  const btn = e.target;
-
-  // CHECK: User must be authenticated
-  if (!currentUser) {
-    alert("Please click 'Connect Pi Wallet' first!");
-    return;
-  }
-
-  btn.disabled = true;
-  btn.innerText = 'Opening Wallet...';
+// FIX: Connect Button Logic
+document.getElementById('connect')?.addEventListener('click', async () => {
+  const btn = document.getElementById('connect');
+  btn.innerText = 'Connecting...';
 
   try {
-    // Clear any stuck sessions
+    // If in sandbox, ensure you authorized on mobile first!
+    const auth = await Pi.authenticate(scopes, onIncompletePaymentFound);
+    currentUser = auth.user;
+    
+    document.getElementById('username').innerText = currentUser.username;
+    document.getElementById('home').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+  } catch (err) {
+    console.error('Auth failed:', err);
+    alert('Handshake failed. In Sandbox? Go to Pi App -> Utilities -> Authorize Sandbox.');
+    btn.innerText = 'Connect Pi Wallet';
+  }
+});
+
+// FIX: Test Buy Button logic
+const handleTestBuy = async (e) => {
+  if (!currentUser) return alert("Please connect wallet first!");
+  
+  const btn = e.target;
+  btn.disabled = true;
+  btn.innerText = 'Processing...';
+
+  try {
+    // Clear any "ghost" payments blocking the UI
     const pending = await Pi.getPendingPayments();
     if (pending.length > 0) {
       await Promise.all(pending.map(p => Pi.cancelPayment(p.identifier)));
@@ -69,21 +72,14 @@ const handleTestBuy = async (e) => {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ paymentId: pid, txid })
-        }).then(res => {
-          alert('Step 10 Success! Check your portal now.');
+        }).then(() => {
+          alert('Transaction Complete! Step 10 should turn green.');
           btn.disabled = false;
           btn.innerText = 'Test Buy 0.1 Pi';
         });
       },
-      onCancel: () => {
-        btn.disabled = false;
-        btn.innerText = 'Test Buy 0.1 Pi';
-      },
-      onError: (error) => {
-        console.error(error);
-        btn.disabled = false;
-        btn.innerText = 'Error - Try Again';
-      }
+      onCancel: () => { btn.disabled = false; btn.innerText = 'Test Buy 0.1 Pi'; },
+      onError: (err) => { alert(err.message); btn.disabled = false; }
     });
   } catch (err) {
     console.error(err);
@@ -91,8 +87,5 @@ const handleTestBuy = async (e) => {
   }
 };
 
-// Attach to both instances of the button
-document.querySelectorAll('#test-buy').forEach(btn => {
-  btn.addEventListener('click', handleTestBuy);
-});
-      
+document.querySelectorAll('#test-buy').forEach(b => b.onclick = handleTestBuy);
+                                   
