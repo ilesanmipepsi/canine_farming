@@ -39,67 +39,117 @@ document.getElementById('connect')?.addEventListener('click', () => {
     });
 });
 
-// SWAP – Reduced amount + pending cleanup + re-init
+// NEW: Test Buy Button – Small amount for Step 10 verification
+document.getElementById('test-buy')?.addEventListener('click', () => {
+  const btn = document.getElementById('test-buy');
+  btn.disabled = true;
+  btn.innerText = 'Processing Test Buy...';
+
+  // Clean any stuck pending payments
+  Pi.getPendingPayments()
+    .then(pending => {
+      if (pending.length > 0) {
+        console.log('Clearing pending payments...');
+        pending.forEach(p => Pi.cancelPayment(p.identifier));
+      }
+    })
+    .catch(() => {});
+
+  Pi.createPayment({
+    amount: 0.1,  // Small test amount – Pi converts to test Pi
+    memo: "Canine Farming – Test Buy (Step 10 Verification)",
+    metadata: { action: "test_buy" }
+  }, {
+    onReadyForServerApproval: (pid) => {
+      console.log('Approving test payment:', pid);
+      return fetch(`${BACKEND_URL}/api/payments/approve`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ paymentId: pid })
+      })
+      .then(res => {
+        if (!res.ok) throw new Error('Approval failed');
+        return res.json();
+      });
+    },
+    onReadyForServerCompletion: (pid, txid) => {
+      console.log('Completing test payment:', pid, txid);
+      return fetch(`${BACKEND_URL}/api/payments/complete`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ paymentId: pid, txid })
+      })
+      .then(res => {
+        if (!res.ok) throw new Error('Completion failed');
+        return res.json();
+      })
+      .then(() => {
+        alert('Success! Test payment completed – Step 10 should turn green!');
+        btn.disabled = false;
+        btn.innerText = 'Test Buy 0.1 Pi';
+      })
+      .catch(err => {
+        console.error('Completion error:', err);
+        alert('Completion failed – check console');
+        btn.disabled = false;
+        btn.innerText = 'Test Buy 0.1 Pi';
+      });
+    },
+    onCancel: () => {
+      alert('Test buy cancelled');
+      btn.disabled = false;
+      btn.innerText = 'Test Buy 0.1 Pi';
+    },
+    onError: (e) => {
+      console.error('Test payment error:', e);
+      alert('Test error: ' + (e.message || 'Unknown error'));
+      btn.disabled = false;
+      btn.innerText = 'Test Buy 0.1 Pi';
+    }
+  });
+});
+
+// SWAP (keep your original, or duplicate the test logic above for full $10 later)
 document.querySelectorAll('#swap').forEach(btn => {
   btn.onclick = () => {
     btn.disabled = true;
     btn.innerText = 'Processing...';
 
-    // Force SDK re-init (clears stuck state)
-    Pi.init({ version: "2.0", sandbox: true });  // Use sandbox: true for testnet
-
-    // Clean up any stuck pending payments
+    // Clean pending payments
     Pi.getPendingPayments()
       .then(pending => {
         if (pending.length > 0) {
-          console.log('Clearing pending payments...');
           pending.forEach(p => Pi.cancelPayment(p.identifier));
         }
       })
       .catch(() => {});
 
     Pi.createPayment({
-      amount: 0.01,  // ← VERY SMALL FOR TESTNET (increase to 10 later)
-      memo: "Canine Farming – Test Puppy (0.000025 $CFM)",
-      metadata: { action: "buy_puppy_test" }
+      amount: 10,
+      memo: "Canine Farming – 1 Puppy (0.000025 $CFM)",
+      metadata: { action: "buy_puppy" }
     }, {
-      onReadyForServerApproval: (pid) => {
-        console.log('Requesting approval:', pid);
-        return fetch(`${BACKEND_URL}/api/payments/approve`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ paymentId: pid })
-        })
-        .then(res => {
-          if (!res.ok) throw new Error('Approval failed');
-          return res.json();
-        });
-      },
-      onReadyForServerCompletion: (pid, txid) => {
-        console.log('Completing payment:', pid, txid);
-        return fetch(`${BACKEND_URL}/api/payments/complete`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ paymentId: pid, txid })
-        })
-        .then(res => {
-          if (!res.ok) throw new Error('Completion failed');
-          return res.json();
-        })
-        .then(() => {
-          alert('Success! Test payment received 🐶');
-          btn.disabled = false;
-          btn.innerText = 'Swap $10 for 0.000025 $CFM';
-        });
-      },
+      onReadyForServerApproval: (pid) => fetch(`${BACKEND_URL}/api/payments/approve`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ paymentId: pid })
+      }),
+      onReadyForServerCompletion: (pid, txid) => fetch(`${BACKEND_URL}/api/payments/complete`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ paymentId: pid, txid })
+      }).then(() => {
+        alert('Success! You received 1 Puppy 🐶');
+        btn.disabled = false;
+        btn.innerText = 'Swap $10 for 0.000025 $CFM';
+      }),
       onCancel: () => {
         alert('Swap cancelled');
         btn.disabled = false;
         btn.innerText = 'Swap $10 for 0.000025 $CFM';
       },
       onError: (e) => {
-        console.error('Payment error:', e);
-        alert('Payment error: ' + (e.message || 'Unknown error'));
+        alert('Error: ' + (e.message || 'Unknown error'));
         btn.disabled = false;
         btn.innerText = 'Swap $10 for 0.000025 $CFM';
       }
@@ -107,7 +157,7 @@ document.querySelectorAll('#swap').forEach(btn => {
   };
 });
 
-// STAKE (unchanged for now)
+// STAKE (unchanged)
 document.querySelectorAll('#stake').forEach(btn => {
   btn.onclick = async () => {
     btn.disabled = true;
@@ -130,7 +180,7 @@ document.querySelectorAll('#stake').forEach(btn => {
   };
 });
 
-// CLAIM (unchanged for now)
+// CLAIM (unchanged)
 document.querySelectorAll('#claim').forEach(btn => {
   btn.onclick = async () => {
     btn.disabled = true;
