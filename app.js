@@ -39,7 +39,7 @@ document.getElementById('connect')?.addEventListener('click', () => {
     });
 });
 
-// SWAP
+// SWAP – Reduced to 0.1 for testnet testing (increase back to 10 later)
 document.querySelectorAll('#swap').forEach(btn => {
   btn.onclick = () => {
     btn.disabled = true;
@@ -56,9 +56,9 @@ document.querySelectorAll('#swap').forEach(btn => {
       .catch(() => {});
 
     Pi.createPayment({
-      amount: 10,
-      memo: "Canine Farming – 1 Puppy (0.000025 $CFM)",
-      metadata: { action: "buy_puppy" }
+      amount: 0.1,  // ← REDUCED TO 0.1 FOR TESTING (change back to 10 when ready)
+      memo: "Canine Farming – Test Puppy (0.000025 $CFM)",
+      metadata: { action: "buy_puppy_test" }
     }, {
       onReadyForServerApproval: (pid) => {
         console.log('Requesting server approval for payment:', pid);
@@ -88,13 +88,13 @@ document.querySelectorAll('#swap').forEach(btn => {
           return res.json();
         })
         .then(() => {
-          alert('Success! You received 1 Puppy 🐶');
+          alert('Success! You received 1 Puppy 🐶 (test payment)');
+          btn.disabled = false;
+          btn.innerText = 'Swap $10 for 0.000025 $CFM';
         })
         .catch(err => {
           console.error('Completion error:', err);
           alert('Completion failed – check your wallet');
-        })
-        .finally(() => {
           btn.disabled = false;
           btn.innerText = 'Swap $10 for 0.000025 $CFM';
         });
