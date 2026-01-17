@@ -1,66 +1,48 @@
-// Change to 'false' if testing on phone inside the Pi Browser
-const isSandbox = true; 
-const BACKEND_URL = 'https://canine-farming.vercel.app';
+// 1. Unified Init for 2026
+Pi.init({ version: "2.0", sandbox: true }); 
 
-// 1. Initialize carefully
-try {
-  Pi.init({ version: "2.0", sandbox: isSandbox });
-} catch (e) {
-  console.error("SDK already initialized or failed:", e);
-}
+// 2. Global State
+let isConnected = false;
 
-let currentUser = null;
-
-// This function unlocks all buttons after a successful login
-const unlockApp = (user) => {
-  currentUser = user;
-  document.getElementById('username').innerText = user.username;
-  document.getElementById('home').style.display = 'none';
-  document.getElementById('dashboard').style.display = 'block';
-  console.log("App unlocked for:", user.username);
-};
-
-// CONNECT BUTTON
+// 3. Fix the "Connect" Button
 document.getElementById('connect').onclick = async () => {
-  try {
-    const auth = await Pi.authenticate(['username', 'payments'], (payment) => {
-      // Automatic recovery for stuck payments
-      fetch(`${BACKEND_URL}/api/payments/complete`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ paymentId: payment.identifier, txid: payment.transaction.txid })
-      });
-    });
-    unlockApp(auth.user);
-  } catch (err) {
-    alert("Connection failed. Did you Authorize Sandbox on your phone?");
-  }
+    try {
+        const auth = await Pi.authenticate(['username', 'payments'], onIncompletePayment);
+        isConnected = true;
+        document.getElementById('dashboard').style.display = 'block';
+        document.getElementById('home').style.display = 'none';
+    } catch (err) {
+        console.error("Auth failed:", err);
+        alert("Authorization failed. Ensure Sandbox is authorized on your phone.");
+    }
 };
 
-// TEST BUY BUTTON
+// 4. Fix the "Test Buy" Button
 document.getElementById('test-buy').onclick = () => {
-  if (!currentUser) return alert("Please Connect Wallet first!");
-
-  Pi.createPayment({
-    amount: 0.1,
-    memo: "Step 10 Verification",
-    metadata: { action: "test_buy" }
-  }, {
-    onReadyForServerApproval: (pid) => {
-      return fetch(`${BACKEND_URL}/api/payments/approve`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ paymentId: pid })
-      }).then(res => res.json());
-    },
-    onReadyForServerCompletion: (pid, txid) => {
-      return fetch(`${BACKEND_URL}/api/payments/complete`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ paymentId: pid, txid })
-      }).then(() => alert("Success! Checklist Step 10 is now clear."));
-    },
-    onCancel: (pid) => console.log("Cancelled", pid),
-    onError: (err) => alert("Wallet Error: " + err.message)
-  });
+    if (!isConnected) return alert("Click 'Connect' first!");
+    
+    Pi.createPayment({
+        amount: 0.1,
+        memo: "Step 10 Verification",
+        metadata: { action: "test_buy" }
+    }, {
+        onReadyForServerApproval: (pid) => {
+            // Your backend must call /approve via the Pi API
+            return fetch('/api/payments/approve', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ paymentId: pid })
+            }).then(res => res.json());
+        },
+        onReadyForServerCompletion: (pid, txid) => {
+            // Your backend must call /complete via the Pi API
+            return fetch('/api/payments/complete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ paymentId: pid, txid })
+            }).then(() => alert("Step 10 Success!"));
+        },
+        onCancel: (pid) => console.log("Cancelled", pid),
+        onError: (err) => alert("Wallet Error: " + err.message)
+    });
 };
