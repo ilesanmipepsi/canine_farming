@@ -14,9 +14,55 @@ let circulatingSupply = 250;
 const TOTAL_SUPPLY = 10000000;
 const APY = 4.0;
 const MIN_HOLDING = 0.000025;
-const STAKES = {};  // uid → { startDate, claimedQuarters, totalClaimed, active }
+const STAKES = {};  // uid → { startDate, claimedQuarters, totalClaimed, active, swapped }
 
-// Swap endpoint (once per wallet)
+// === NEW: Pi SDK Payment Endpoints (fixes timeout) ===
+
+// Instant approval response (prevents "Payment Expired")
+app.post('/payments/approve', (req, res) => {
+  const { paymentId } = req.body;
+
+  console.log('Pi SDK requesting approval for payment:', paymentId);
+
+  // Respond IMMEDIATELY to stop Pi SDK timeout
+  res.status(200).json({ success: true });
+});
+
+// Completion callback (called after user approves in Pi app)
+app.post('/payments/complete', async (req, res) => {
+  const { paymentId, txid } = req.body;
+
+  console.log('Pi SDK payment completed:', { paymentId, txid });
+
+  try {
+    // Verify payment with Pi API (optional but recommended)
+    const paymentVerification = await axios.get(`${BASE_URL}/payments/${paymentId}`, {
+      headers: { Authorization: `Bearer ${API_KEY}` }
+    });
+
+    if (paymentVerification.data.status !== 'completed') {
+      return res.status(400).json({ error: 'Payment not completed' });
+    }
+
+    // Credit 0.000025 $CFM to user (use your real transfer logic here)
+    const uid = paymentVerification.data.user.uid;  // Get user from payment
+    await transferCFM(uid, 0.000025, 'Swap reward');
+
+    // Mark as swapped (if not already)
+    if (!STAKES[uid]?.swapped) {
+      STAKES[uid] = { ...STAKES[uid], swapped: true };
+    }
+
+    circulatingSupply += 0.000025;
+
+    res.status(200).json({ success: true, cfm: 0.000025 });
+  } catch (err) {
+    console.error('Payment completion error:', err.message);
+    res.status(500).json({ error: 'Internal error' });
+  }
+});
+
+// === Existing endpoints (unchanged for now) ===
 app.post('/swap', async (req, res) => {
   const { token } = req.body;
   const user = await verifyUser(token);
@@ -24,11 +70,9 @@ app.post('/swap', async (req, res) => {
 
   if (STAKES[user.uid]?.swapped) return res.status(400).json({ error: 'Already swapped once' });
 
-  // Verify 10 Pi payment (mock for testnet)
   const balance = await getCFMBalance(user.uid);
   if (balance < MIN_HOLDING) return res.status(400).json({ error: 'Insufficient Pi for swap' });
 
-  // Credit 0.000025 $CFM
   await transferCFM(user.uid, 0.000025, 'Swap reward');
   STAKES[user.uid] = { ...STAKES[user.uid], swapped: true };
 
@@ -36,7 +80,6 @@ app.post('/swap', async (req, res) => {
   res.json({ success: true, cfm: 0.000025 });
 });
 
-// Stake endpoint
 app.post('/stake', async (req, res) => {
   const { token } = req.body;
   const user = await verifyUser(token);
@@ -57,7 +100,6 @@ app.post('/stake', async (req, res) => {
   res.json({ success: true, message: 'Staked! 400% APY active' });
 });
 
-// Claim endpoint (with your logic)
 app.post('/claim', async (req, res) => {
   const { token } = req.body;
   const user = await verifyUser(token);
@@ -66,7 +108,7 @@ app.post('/claim', async (req, res) => {
   const staker = STAKES[user.uid];
   if (!staker || !staker.staked || !staker.active) return res.status(400).json({ error: 'Not eligible' });
 
-  const quartersElapsed = Math.floor((Date.now() - staker.startDate) / (3 * 30 * 24 * 60 * 60 * 1000)); // 3 months
+  const quartersElapsed = Math.floor((Date.now() - staker.startDate) / (3 * 30 * 24 * 60 * 60 * 1000));
   const eligibleQuarters = quartersElapsed - staker.claimedQuarters;
 
   if (eligibleQuarters <= 0) return res.status(400).json({ error: 'No rewards ready' });
@@ -74,12 +116,12 @@ app.post('/claim', async (req, res) => {
   let reward = 0;
   for (let q = 1; q <= eligibleQuarters; q++) {
     const year = Math.floor((staker.claimedQuarters + q - 1) / 4) + 1;
-    reward += year === 1 ? 0.000025 : 0.0001 * (APY / 100); // Year 1 fixed, Year 2+ 400% on circulating
+    reward += year === 1 ? 0.000025 : 0.0001 * (APY / 100);
   }
 
   if (staker.totalClaimed + reward >= 0.999975) {
-    reward = 0.999975 - staker.totalClaimed; // Cap at 1 $CFM total
-    staker.active = false; // Graduate to shareholder
+    reward = 0.999975 - staker.totalClaimed;
+    staker.active = false;
   }
 
   await transferCFM(user.uid, reward, 'Staking reward');
@@ -90,7 +132,7 @@ app.post('/claim', async (req, res) => {
   res.json({ success: true, rewarded: reward, total: staker.totalClaimed + 0.000025, graduated: !staker.active });
 });
 
-// Helper functions (mock for testnet)
+// Mock helpers (replace with real Pi API calls later)
 async function verifyUser(token) {
   try {
     const res = await axios.post(`${BASE_URL}/auth/verify`, { token }, {
@@ -98,7 +140,7 @@ async function verifyUser(token) {
     });
     return res.data.user;
   } catch {
-    return { uid: 'test_uid' }; // Mock
+    return { uid: 'test_uid' }; // Mock for testnet
   }
 }
 
@@ -114,8 +156,8 @@ async function getCFMBalance(uid) {
 }
 
 async function transferCFM(uid, amount, memo) {
-  // Mock transfer - replace with real Pi API
   console.log(`Transferred ${amount} $CFM to ${uid}: ${memo}`);
+  // Replace with real Pi transfer API call later
 }
 
 app.listen(3000, () => console.log('Canine Farming Backend on Testnet'));
