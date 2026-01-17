@@ -1,4 +1,4 @@
-const BACKEND_URL = 'https://canine-farming.vercel.app';  // ← Your Vercel URL (short one)
+const BACKEND_URL = 'https://canine-farming.vercel.app';  // Your Vercel URL
 
 const scopes = ['username', 'payments', 'wallet_address'];
 
@@ -39,13 +39,16 @@ document.getElementById('connect')?.addEventListener('click', () => {
     });
 });
 
-// SWAP – Reduced to 0.1 for testnet testing (increase back to 10 later)
+// SWAP – Reduced amount + pending cleanup + re-init
 document.querySelectorAll('#swap').forEach(btn => {
   btn.onclick = () => {
     btn.disabled = true;
     btn.innerText = 'Processing...';
 
-    // Clean up any stuck pending payments (fixes "Failed to check a pending payment")
+    // Force SDK re-init (clears stuck state)
+    Pi.init({ version: "2.0", sandbox: true });  // Use sandbox: true for testnet
+
+    // Clean up any stuck pending payments
     Pi.getPendingPayments()
       .then(pending => {
         if (pending.length > 0) {
@@ -56,12 +59,12 @@ document.querySelectorAll('#swap').forEach(btn => {
       .catch(() => {});
 
     Pi.createPayment({
-      amount: 0.1,  // ← REDUCED TO 0.1 FOR TESTING (change back to 10 when ready)
+      amount: 0.01,  // ← VERY SMALL FOR TESTNET (increase to 10 later)
       memo: "Canine Farming – Test Puppy (0.000025 $CFM)",
       metadata: { action: "buy_puppy_test" }
     }, {
       onReadyForServerApproval: (pid) => {
-        console.log('Requesting server approval for payment:', pid);
+        console.log('Requesting approval:', pid);
         return fetch(`${BACKEND_URL}/api/payments/approve`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -70,10 +73,6 @@ document.querySelectorAll('#swap').forEach(btn => {
         .then(res => {
           if (!res.ok) throw new Error('Approval failed');
           return res.json();
-        })
-        .catch(err => {
-          console.error('Approval error:', err);
-          throw err;
         });
       },
       onReadyForServerCompletion: (pid, txid) => {
@@ -88,13 +87,7 @@ document.querySelectorAll('#swap').forEach(btn => {
           return res.json();
         })
         .then(() => {
-          alert('Success! You received 1 Puppy 🐶 (test payment)');
-          btn.disabled = false;
-          btn.innerText = 'Swap $10 for 0.000025 $CFM';
-        })
-        .catch(err => {
-          console.error('Completion error:', err);
-          alert('Completion failed – check your wallet');
+          alert('Success! Test payment received 🐶');
           btn.disabled = false;
           btn.innerText = 'Swap $10 for 0.000025 $CFM';
         });
@@ -114,7 +107,7 @@ document.querySelectorAll('#swap').forEach(btn => {
   };
 });
 
-// STAKE
+// STAKE (unchanged for now)
 document.querySelectorAll('#stake').forEach(btn => {
   btn.onclick = async () => {
     btn.disabled = true;
@@ -137,7 +130,7 @@ document.querySelectorAll('#stake').forEach(btn => {
   };
 });
 
-// CLAIM
+// CLAIM (unchanged for now)
 document.querySelectorAll('#claim').forEach(btn => {
   btn.onclick = async () => {
     btn.disabled = true;
