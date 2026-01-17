@@ -1,32 +1,35 @@
-const API_KEY = process.env.PI_API_KEY; // Must be 2026 Mainnet/Testnet key
-const BASE_URL = 'https://api.minepi.com'; // Standard 2026 API endpoint
-
-// 1. APPROVE ENDPOINT (Must return specific Pi Network response)
+// 1. APPROVE ENDPOINT: Tells Pi Network to show the Wallet UI
 app.post('/api/payments/approve', async (req, res) => {
   const { paymentId } = req.body;
+  
   try {
-    // MANDATORY: You must POST to Pi's server to enable the wallet popup
+    // IMPORTANT: You must call the Pi API to approve the payment
     await axios.post(`${BASE_URL}/payments/${paymentId}/approve`, {}, {
       headers: { Authorization: `Bearer ${API_KEY}` }
     });
-    res.status(200).json({ approved: true });
+    
+    console.log(`Payment ${paymentId} approved on Pi Network`);
+    res.status(200).json({ success: true });
   } catch (err) {
-    console.error('Approve Error:', err.response?.data || err.message);
-    res.status(500).json({ error: 'Approval failed' });
+    console.error('Approval Error:', err.response?.data || err.message);
+    res.status(500).json({ error: 'Failed to approve payment with Pi Network' });
   }
 });
 
-// 2. COMPLETE ENDPOINT (Required to turn Step 10 GREEN)
+// 2. COMPLETE ENDPOINT: Finalizes the transaction
 app.post('/api/payments/complete', async (req, res) => {
   const { paymentId, txid } = req.body;
+
   try {
-    // MANDATORY: You must submit the txid to Pi's server to finalize
-    const response = await axios.post(`${BASE_URL}/payments/${paymentId}/complete`, { txid }, {
+    // IMPORTANT: You must submit the txid to Pi Network to complete the transaction
+    await axios.post(`${BASE_URL}/payments/${paymentId}/complete`, { txid }, {
       headers: { Authorization: `Bearer ${API_KEY}` }
     });
-    res.status(200).json(response.data);
+
+    console.log(`Payment ${paymentId} marked as COMPLETE`);
+    res.status(200).json({ success: true });
   } catch (err) {
-    console.error('Complete Error:', err.response?.data || err.message);
-    res.status(500).json({ error: 'Completion failed' });
+    console.error('Completion Error:', err.response?.data || err.message);
+    res.status(500).json({ error: 'Failed to complete payment' });
   }
 });
