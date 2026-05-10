@@ -12,7 +12,7 @@
       margin: 0; 
       padding: 0; 
       text-align: center;
-      padding-top: 70px; /* Prevents Pi Browser top bar overlap */
+      padding-top: 70px; 
     }
     .container { max-width: 420px; margin: 0 auto; padding: 10px; }
     .header {
@@ -45,47 +45,36 @@
       <p>Build Your GSD Empire – 400% APY</p>
     </div>
 
-    <!-- HOME SCREEN (before connect) -->
+    <!-- HOME SCREEN -->
     <div id="home">
       <div class="info"><p>Join the German Shepherd Dog revolution</p></div>
       <button id="connect" class="button">Connect Pi Wallet</button>
-      <button id="test-buy" class="button test">Test Buy 0.1 Pi (Step 10)</button>
-      <button id="swap" class="button">Swap $10 for 0.000025 $CFM</button>
-      <button id="open-shop" class="button shop">Open Shop</button>
-      <button id="market" class="button market">Marketplace</button>
-      <button id="stake" class="button stake">Stake $CFM</button>
+      <button class="button test">Test Buy 0.1 Pi (Step 10)</button>
+      <button class="button">Swap $10 for 0.000025 $CFM</button>
+      <button class="button shop">Open Shop</button>
+      <button class="button market">Marketplace</button>
+      <button class="button stake">Stake $CFM</button>
     </div>
 
-    <!-- DASHBOARD (after connect) -->
+    <!-- DASHBOARD -->
     <div id="dashboard">
       <div class="info">
         <h2>Welcome, <span id="username">Pioneer</span>!</h2>
         <p>Your GSD Kennel is growing</p>
       </div>
-      <button id="test-buy" class="button test">Test Buy 0.1 Pi (Step 10)</button>
-      <button id="swap" class="button">Swap $10 for 0.000025 $CFM</button>
-      <button id="open-shop" class="button shop">Open Shop</button>
-      <button id="market" class="button market">Marketplace</button>
-      <button id="stake" class="button stake">Stake $CFM</button>
+      <button class="button test">Test Buy 0.1 Pi (Step 10)</button>
+      <button class="button">Swap $10 for 0.000025 $CFM</button>
+      <button class="button shop">Open Shop</button>
+      <button class="button market">Marketplace</button>
+      <button class="button stake">Stake $CFM</button>
       <button id="claim" class="button claim">Claim Rewards</button>
     </div>
   </div>
 
-  <!-- Pi SDK — MUST BE INITIALIZED FIRST -->
+  <!-- 1. Load Pi SDK -->
   <script src="https://sdk.minepi.com/pi-sdk.js"></script>
-  <script>
-    // Initialize Pi SDK as soon as it's loaded
-    function onPiSDKLoad() {
-      Pi.init({ version: "2.0", sandbox: false });  // Real production mode
-      console.log("Pi SDK initialized");
-    }
-    // Some Pi Browser versions need this event
-    window.addEventListener('load', onPiSDKLoad);
-    // Fallback
-    if (window.Pi) onPiSDKLoad();
-  </script>
 
-  <!-- Your app logic -->
+  <!-- 2. Load your logic (which handles Pi.init) -->
   <script src="app.js"></script>
 </body>
 </html>
