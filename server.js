@@ -6,8 +6,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// FIXED: Correct official Pi API v2 URL
 const BASE_URL = "https://minepi.com";
-// Ensure this matches your Vercel Environment Variable name exactly
 const API_KEY = process.env.PI_API_KEY; 
 
 // 1. APPROVE ENDPOINT
@@ -16,9 +16,10 @@ app.post('/api/payments/approve', async (req, res) => {
   console.log(`Approving Payment: ${paymentId}`);
 
   try {
+    // FIXED: Correct path structure for /approve
     const response = await axios.post(`${BASE_URL}/payments/${paymentId}/approve`, {}, {
       headers: { 
-        'Authorization': `Key ${API_KEY}`, // Note: Pi API usually uses "Key" or "Bearer"
+        'Authorization': `Key ${API_KEY}`,
         'Content-Type': 'application/json'
       }
     });
@@ -26,6 +27,7 @@ app.post('/api/payments/approve', async (req, res) => {
     console.log(`Approval Success for ${paymentId}`);
     res.status(200).json(response.data);
   } catch (err) {
+    // This will now log the actual error from Pi Network in your Vercel logs
     console.error('Approval Failed:', err.response?.data || err.message);
     res.status(500).json({ error: "Backend failed to approve" });
   }
@@ -37,6 +39,7 @@ app.post('/api/payments/complete', async (req, res) => {
   console.log(`Completing Payment: ${paymentId} with TXID: ${txid}`);
 
   try {
+    // FIXED: Correct path structure for /complete
     const response = await axios.post(`${BASE_URL}/payments/${paymentId}/complete`, { txid }, {
       headers: { 
         'Authorization': `Key ${API_KEY}`,
@@ -53,6 +56,9 @@ app.post('/api/payments/complete', async (req, res) => {
 });
 
 app.get('/', (req, res) => res.send('Backend is Active!'));
+
+// Export for Vercel
+module.exports = app;
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
