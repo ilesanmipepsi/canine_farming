@@ -1,0 +1,8 @@
+{
+‎  "rewrites": [
+‎    { "source": "/pi-sdk.js", "destination": "https://sdk.minepi.com/pi-sdk.js" },
+‎    { "source": "/api/(.*)",   "destination": "/api/$1" },
+‎    { "source": "/(.*)",      "destination": "/index.html" }
+‎  ],
+‎  "cleanUrls": true
+‎}
