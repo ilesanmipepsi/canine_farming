@@ -7,7 +7,7 @@ app.use(cors());
 app.use(express.json());
 
 // FIXED: Correct official Pi API v2 URL
-const BASE_URL = "https://api.minepi.com";
+const BASE_URL = "https://minepi.com";
 const API_KEY = process.env.PI_API_KEY; 
 
 // 1. APPROVE ENDPOINT
