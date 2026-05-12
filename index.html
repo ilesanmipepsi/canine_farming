@@ -3,78 +3,85 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Canine Farming ($CFM)</title>
+  <title>Canine Farming Protocol ($CFM)</title>
   <style>
     body { 
-      font-family: Arial, sans-serif; 
-      background: #f5f5f5; 
-      color: #333; 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+      background: #1a1a1a; /* Darker, modern crypto theme */
+      color: #f5f5f5; 
       margin: 0; 
       padding: 0; 
       text-align: center;
       padding-top: 70px; 
     }
-    .container { max-width: 420px; margin: 0 auto; padding: 10px; }
+    .container { max-width: 420px; margin: 0 auto; padding: 15px; }
     .header {
-      background: #8b5e3c !important;
+      background: linear-gradient(135deg, #8b5e3c, #5d3a1a) !important;
       color: white !important;
-      padding: 18px;
-      border-radius: 12px 12px 0 0;
-      margin: -10px -10px 20px -10px;
-      font-size: 1.4em;
+      padding: 25px;
+      border-radius: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     }
     .button {
-      background: #007bff; color: white; padding: 15px; border: none;
-      border-radius: 10px; font-size: 1.1em; margin: 8px; cursor: pointer;
-      width: 90%; font-weight: bold; display: block;
+      background: #3b82f6; color: white; padding: 16px; border: none;
+      border-radius: 12px; font-size: 1.1em; margin: 10px 0; cursor: pointer;
+      width: 100%; font-weight: bold; display: block;
+      transition: transform 0.2s;
     }
-    .button.stake   { background: #28a745; }
-    .button.shop    { background: #8b5e3c; }
-    .button.market  { background: #d4a017; }
-    .button.claim   { background: #ea4335; }
-    .button.test    { background: #ff9800; }
-    .info { background: white; padding: 16px; border-radius: 10px; margin: 12px 0; box-shadow: 0 3px 10px rgba(0,0,0,0.1); }
+    .button:active { transform: scale(0.98); }
+    .button.stake   { background: #10b981; } /* Emerald Green */
+    .button.shop    { background: #8b5e3c; } /* Bronze/Wood */
+    .button.market  { background: #f59e0b; } /* Amber */
+    .button.claim   { background: #ef4444; } /* Red */
+    .button.test    { background: #6366f1; } /* Indigo */
+    
+    .info { 
+      background: #2d2d2d; 
+      padding: 20px; 
+      border-radius: 12px; 
+      margin: 15px 0; 
+      border: 1px solid #444;
+    }
     #dashboard { display: none; }
+    h1 { margin: 0; font-size: 1.6em; }
+    p { opacity: 0.8; font-size: 0.9em; }
   </style>
 </head>
 <body>
 
   <div class="container">
     <div class="header">
-      <h1>Canine Farming ($CFM)</h1>
-      <p>Build Your GSD Empire – 400% APY</p>
+      <h1>Canine Farming Protocol</h1>
+      <p>$CFM GameFi Ecosystem – 400% APY</p>
     </div>
 
-    <!-- HOME SCREEN -->
+    <!-- AUTH SCREEN -->
     <div id="home">
-      <div class="info"><p>Join the German Shepherd Dog revolution</p></div>
-      <button id="connect" class="button">Connect Pi Wallet</button>
-      <button class="button test">Test Buy 0.1 Pi (Step 10)</button>
-      <button class="button">Swap $10 for 0.000025 $CFM</button>
-      <button class="button shop">Open Shop</button>
-      <button class="button market">Marketplace</button>
-      <button class="button stake">Stake $CFM</button>
+      <div class="info">
+        <p>Initialize your kennel on the Pi Network to start earning yield.</p>
+      </div>
+      <button id="connect" class="button">Initialize Pi Session</button>
+      <button class="button test">Verify Step 10 (0.1 Pi)</button>
     </div>
 
-    <!-- DASHBOARD -->
+    <!-- MAIN CONSOLE (Dashboard) -->
     <div id="dashboard">
       <div class="info">
-        <h2>Welcome, <span id="username">Pioneer</span>!</h2>
-        <p>Your GSD Kennel is growing</p>
+        <h2>Operator: <span id="username">Pioneer</span></h2>
+        <p>Status: Active | Yield: 400% APY</p>
       </div>
-      <button class="button test">Test Buy 0.1 Pi (Step 10)</button>
-      <button class="button">Swap $10 for 0.000025 $CFM</button>
-      <button class="button shop">Open Shop</button>
-      <button class="button market">Marketplace</button>
-      <button class="button stake">Stake $CFM</button>
-      <button id="claim" class="button claim">Claim Rewards</button>
+      
+      <button class="button test">Execute Test Transaction</button>
+      <button class="button">Mint $CFM ($10 Liquidity)</button>
+      <button class="button shop">Kennel Supply Store</button>
+      <button class="button market">P2P Marketplace</button>
+      <button class="button stake">Stake $CFM for Yield</button>
+      <button id="claim" class="button claim">Harvest Rewards</button>
     </div>
   </div>
 
-  <!-- 1. Load Pi SDK -->
-  <script src="https://sdk.minepi.com/pi-sdk.js"></script>
-
-  <!-- 2. Load your logic (which handles Pi.init) -->
+  <script src="https://minepi.com"></script>
   <script src="app.js"></script>
 </body>
 </html>
