@@ -1,5 +1,5 @@
 // 1. ENVIRONMENT CONFIGURATION
-const BACKEND_URL = 'vercel.app'; 
+const BACKEND_URL = 'canine-farming.vercel.app'; 
 
 // Initialize SDK (Required for Sandbox Testing)
 window.Pi.init({ version: "2.0", sandbox: true }); 
