@@ -6,26 +6,22 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const BASE_URL = "https://minepi.com"; 
-const API_KEY = process.env.PI_API_KEY; 
+const BASE_URL = "https://api.minepi.com";
+const API_KEY = process.env.PI_API_KEY;
 
-// --- FIXED ENDPOINTS (Aligned to handle vercel.json stripped routes) ---
+if (!API_KEY) console.warn("PI_API_KEY is missing!");
 
-// 1. APPROVE ENDPOINT
-app.post('/payments/approve', async (req, res) => {
+app.post('/api/payments/approve', async (req, res) => {
   const { paymentId } = req.body;
-  console.log(`Approving Payment ID: ${paymentId}`);
-
   if (!paymentId) return res.status(400).json({ error: "Missing paymentId" });
 
   try {
-    const response = await axios.post(`${BASE_URL}/payments/${paymentId}/approve`, {}, {
+    const response = await axios.post(`${BASE_URL}/v2/payments/${paymentId}/approve`, {}, {
       headers: { 
         'Authorization': `Key ${API_KEY}`,
         'Content-Type': 'application/json'
       }
     });
-    console.log(`Approval Success: ${paymentId}`);
     res.status(200).json(response.data);
   } catch (err) {
     console.error('Approval Failed:', err.response?.data || err.message);
@@ -33,19 +29,17 @@ app.post('/payments/approve', async (req, res) => {
   }
 });
 
-// 2. COMPLETE ENDPOINT
-app.post('/payments/complete', async (req, res) => {
+app.post('/api/payments/complete', async (req, res) => {
   const { paymentId, txid } = req.body;
-  console.log(`Completing Payment ID: ${paymentId} with TXID: ${txid}`);
+  if (!paymentId) return res.status(400).json({ error: "Missing paymentId" });
 
   try {
-    const response = await axios.post(`${BASE_URL}/payments/${paymentId}/complete`, { txid }, {
+    const response = await axios.post(`${BASE_URL}/v2/payments/${paymentId}/complete`, { txid }, {
       headers: { 
         'Authorization': `Key ${API_KEY}`,
         'Content-Type': 'application/json'
       }
     });
-    console.log(`Completion Success: ${paymentId}`);
     res.status(200).json(response.data);
   } catch (err) {
     console.error('Completion Failed:', err.response?.data || err.message);
@@ -53,20 +47,10 @@ app.post('/payments/complete', async (req, res) => {
   }
 });
 
-// --- GAMEFI SYSTEM ROUTES ---
+app.post('/api/stake', (req, res) => res.json({ success: true, message: 'Staked successfully! 400% APY active.' }));
+app.post('/api/claim', (req, res) => res.json({ success: true, message: 'Harvest successful!' }));
+app.post('/api/swap', (req, res) => res.json({ success: true, message: 'Mint complete!' }));
 
-app.post('/stake', (req, res) => {
-  res.status(200).json({ success: true, message: 'Staked successfully! 400% APY active.' });
-});
-
-app.post('/claim', (req, res) => {
-  res.status(200).json({ success: true, message: 'Harvest successful!' });
-});
-
-app.post('/swap', (req, res) => {
-  res.status(200).json({ success: true, message: 'Mint complete! 1 Puppy token generated.' });
-});
-
-app.get('/', (req, res) => res.send('Canine Farming Protocol Live Engine.'));
+app.get('/', (req, res) => res.send('Canine Farming Protocol Backend Running'));
 
 module.exports = app;
