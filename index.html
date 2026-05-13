@@ -3,35 +3,93 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Canine Farming Protocol ($CFM)</title>
+  <title>Canine Farming Protocol</title>
   <style>
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #1a1a1a; color: #f5f5f5; margin: 0; padding: 0; text-align: center; padding-top: 20px; }
-    .container { max-width: 420px; margin: 0 auto; padding: 15px; }
-    .header { background: linear-gradient(135deg, #8b5e3c, #5d3a1a); color: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-    .button { background: #3b82f6; color: white; padding: 16px; border: none; border-radius: 12px; font-size: 1.1em; margin: 10px 0; cursor: pointer; width: 100%; font-weight: bold; display: block; }
-    .button.stake { background: #10b981; }
-    .button.test { background: #6366f1; }
-    .button.claim { background: #ef4444; }
-    .info { background: #2d2d2d; padding: 15px; border-radius: 12px; margin: 12px 0; border: 1px solid #444; }
+    body { 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+      background: #0a1f1a; 
+      color: #e8e8e8; 
+      margin: 0; 
+      padding: 0; 
+      text-align: center;
+      padding-top: 20px; 
+    }
+    .container { max-width: 460px; margin: 0 auto; padding: 15px; }
+
+    .header {
+      background: linear-gradient(135deg, #0f2e24, #1a3f32);
+      color: white;
+      padding: 30px 20px;
+      border-radius: 20px;
+      margin-bottom: 25px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+      border: 1px solid #1f5c4a;
+    }
+
+    .header h1 {
+      margin: 0 0 8px 0;
+      font-size: 2em;
+      color: #f4c95d;
+      letter-spacing: 1px;
+    }
+
+    .header p {
+      margin: 0;
+      opacity: 0.95;
+      font-size: 1.1em;
+    }
+
+    .info { 
+      background: #112d26; 
+      padding: 20px; 
+      border-radius: 16px; 
+      margin: 15px 0; 
+      border: 1px solid #1f5c4a;
+    }
+
+    .button {
+      color: white; 
+      padding: 17px; 
+      border: none;
+      border-radius: 14px; 
+      font-size: 1.08em; 
+      margin: 12px 0; 
+      cursor: pointer;
+      width: 100%; 
+      font-weight: 600; 
+      display: block;
+      transition: all 0.3s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(244, 201, 93, 0.25);
+    }
+
+    .button.connect { background: #1f5c4a; }
+    .button.test    { background: linear-gradient(90deg, #f4c95d, #d4a017); color: #0a1f1a; font-weight: bold; }
+    .button.mint    { background: #2e7d5c; }
+    .button.stake   { background: #1f5c4a; }
+    .button.claim   { background: #c94f2e; }
+
+    .gold-text { color: #f4c95d; }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
-      <h1>Canine Farming Protocol</h1>
-      <p>$CFM GameFi Ecosystem – 400% APY</p>
+      <h1>CANINE FARMING</h1>
+      <p class="gold-text">Protocol • Sustainable 400% Growth • 10M Max Supply</p>
     </div>
 
     <div class="info">
-      <h2>Session Status: <span id="username">Uninitialized</span></h2>
+      <h2>Session Status: <span id="username" class="gold-text">Uninitialized</span></h2>
     </div>
     
-    <button id="connect" class="button">Initialize Pi Session</button>
+    <button id="connect" class="button connect">Initialize Pi Session</button>
     <button class="button test">Verify Step 10 (0.1 Pi)</button>
-    <button class="button mint-btn">Mint $CFM ($10 Liquidity)</button>
-    <button class="button shop">Kennel Supply Store</button>
-    <button class="button market">P2P Marketplace</button>
-    <button class="button stake">Stake $CFM for Yield</button>
+    <button class="button mint">Mint $CFM</button>
+    <button class="button stake">Stake $CFM</button>
     <button class="button claim">Harvest Rewards</button>
   </div>
 
