@@ -27,9 +27,7 @@
       background: #3b82f6; color: white; padding: 16px; border: none;
       border-radius: 12px; font-size: 1.1em; margin: 10px 0; cursor: pointer;
       width: 100%; font-weight: bold; display: block;
-      transition: transform 0.2s;
     }
-    .button:active { transform: scale(0.98); }
     .button.stake   { background: #10b981; } 
     .button.shop    { background: #8b5e3c; } 
     .button.market  { background: #f59e0b; } 
@@ -55,12 +53,10 @@
       <p>$CFM GameFi Ecosystem – 400% APY</p>
     </div>
 
-    <!-- CONNECTION SYSTEM -->
     <div class="info">
       <h2>Session Status: <span id="username">Uninitialized</span></h2>
     </div>
     
-    <!-- ALL APP SYSTEM CONTROLS OPEN & TESTABLE -->
     <button id="connect" class="button">Initialize Pi Session</button>
     <button class="button test">Verify Step 10 (0.1 Pi)</button>
     <button class="button mint-btn">Mint $CFM ($10 Liquidity)</button>
@@ -70,8 +66,8 @@
     <button id="claim" class="button claim">Harvest Rewards</button>
   </div>
 
-  <!-- FIXED: Official Secure SDK Script Bridge CDN URL -->
-  <script src="minepi.com"></script>
+  <!-- FIXED: Canonical Pi Network SDK Script URL -->
+  <script src="https://sdk.minepi.com/pi-sdk.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
