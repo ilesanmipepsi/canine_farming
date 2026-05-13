@@ -9,7 +9,7 @@ app.use(express.json());
 const BASE_URL = "https://api.minepi.com";
 const API_KEY = process.env.PI_API_KEY;
 
-if (!API_KEY) console.warn("⚠️ PI_API_KEY is missing!");
+if (!API_KEY) console.warn("PI_API_KEY is missing!");
 
 app.post('/api/payments/approve', async (req, res) => {
   const { paymentId } = req.body;
@@ -24,8 +24,8 @@ app.post('/api/payments/approve', async (req, res) => {
     });
     res.status(200).json(response.data);
   } catch (err) {
-    console.error('Approval Error:', err.message);
-    res.status(500).json({ error: "Approval failed" });
+    console.error('Approval Failed:', err.response?.data || err.message);
+    res.status(500).json({ error: "Backend approval failure" });
   }
 });
 
@@ -42,15 +42,15 @@ app.post('/api/payments/complete', async (req, res) => {
     });
     res.status(200).json(response.data);
   } catch (err) {
-    console.error('Completion Error:', err.message);
-    res.status(500).json({ error: "Completion failed" });
+    console.error('Completion Failed:', err.response?.data || err.message);
+    res.status(500).json({ error: "Backend completion failure" });
   }
 });
 
 app.post('/api/stake', (req, res) => res.json({ success: true, message: 'Staked successfully! 400% APY active.' }));
 app.post('/api/claim', (req, res) => res.json({ success: true, message: 'Harvest successful!' }));
-app.post('/api/swap',  (req, res) => res.json({ success: true, message: 'Mint complete!' }));
+app.post('/api/swap', (req, res) => res.json({ success: true, message: 'Mint complete!' }));
 
-app.get('/', (req, res) => res.send('Canine Farming Protocol Backend Running ✅'));
+app.get('/', (req, res) => res.send('Canine Farming Protocol Backend Running'));
 
 module.exports = app;
