@@ -115,4 +115,3 @@ if (claimBtn) claimBtn.onclick = () => handleAction('claim');
 
 const mintBtn = document.querySelector('.button.mint-btn');
 if (mintBtn) mintBtn.onclick = () => handleAction('swap');
-          
