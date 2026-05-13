@@ -5,39 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Canine Farming Protocol ($CFM)</title>
   <style>
-    body { 
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-      background: #1a1a1a; 
-      color: #f5f5f5; 
-      margin: 0; 
-      padding: 0; 
-      text-align: center;
-      padding-top: 20px; 
-    }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #1a1a1a; color: #f5f5f5; margin: 0; padding: 0; text-align: center; padding-top: 20px; }
     .container { max-width: 420px; margin: 0 auto; padding: 15px; }
-    .header {
-      background: linear-gradient(135deg, #8b5e3c, #5d3a1a);
-      color: white;
-      padding: 20px;
-      border-radius: 15px;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-    }
-    .button {
-      background: #3b82f6; color: white; padding: 16px; border: none;
-      border-radius: 12px; font-size: 1.1em; margin: 10px 0; cursor: pointer;
-      width: 100%; font-weight: bold; display: block;
-    }
-    .button.stake   { background: #10b981; } 
-    .button.test    { background: #6366f1; } 
-    .button.claim   { background: #ef4444; } 
-    .info { 
-      background: #2d2d2d; 
-      padding: 15px; 
-      border-radius: 12px; 
-      margin: 12px 0; 
-      border: 1px solid #444;
-    }
+    .header { background: linear-gradient(135deg, #8b5e3c, #5d3a1a); color: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+    .button { background: #3b82f6; color: white; padding: 16px; border: none; border-radius: 12px; font-size: 1.1em; margin: 10px 0; cursor: pointer; width: 100%; font-weight: bold; display: block; }
+    .button.stake { background: #10b981; }
+    .button.test { background: #6366f1; }
+    .button.claim { background: #ef4444; }
+    .info { background: #2d2d2d; padding: 15px; border-radius: 12px; margin: 12px 0; border: 1px solid #444; }
   </style>
 </head>
 <body>
@@ -62,16 +37,10 @@
 
   <script src="https://sdk.minepi.com/pi-sdk.js"></script>
   
-  <!-- IMPORTANT: Initialize Pi SDK Here -->
   <script>
-    Pi.init({ 
-      version: "2.0", 
-      sandbox: true 
-    }).then(() => {
-      console.log("✅ Pi SDK Initialized Successfully");
-    }).catch(err => {
-      console.error("Pi Init Failed:", err);
-    });
+    Pi.init({ version: "2.0", sandbox: true })
+      .then(() => console.log("✅ Pi SDK Initialized"))
+      .catch(err => console.error("Pi Init Failed:", err));
   </script>
 
   <script src="app.js"></script>
