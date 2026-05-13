@@ -5,19 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Canine Farming Protocol</title>
   
-  <!-- Icons -->
-  <link rel="icon" type="image/png" href="favicon.png">
-  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/ilesanmipepsi/canine_farming/main/favicon.png">
+  <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/ilesanmipepsi/canine_farming/main/apple-touch-icon.png">
 
   <style>
     body { 
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
       background: #0a1f1a; 
       color: #e8e8e8; 
-      margin: 0; 
-      padding: 0; 
-      text-align: center;
-      padding-top: 20px; 
+      margin: 0; padding: 0; text-align: center; padding-top: 20px; 
     }
     .container { max-width: 460px; margin: 0 auto; padding: 15px; }
 
@@ -27,7 +23,7 @@
       padding: 30px 20px;
       border-radius: 20px;
       margin-bottom: 25px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.7);
       border: 1px solid #1f5c4a;
     }
 
@@ -40,59 +36,28 @@
       box-shadow: 0 6px 20px rgba(244, 201, 93, 0.4);
     }
 
-    .header h1 {
-      margin: 10px 0 8px 0;
-      font-size: 2.1em;
-      color: #f4c95d;
-      letter-spacing: 2px;
-    }
-
-    .header p {
-      margin: 0;
-      opacity: 0.95;
-      font-size: 1.05em;
-    }
-
-    .info { 
-      background: #112d26; 
-      padding: 20px; 
-      border-radius: 16px; 
-      margin: 15px 0; 
-      border: 1px solid #1f5c4a;
-    }
+    .header h1 { margin: 10px 0 8px 0; font-size: 2.1em; color: #f4c95d; letter-spacing: 2px; }
+    .gold-text { color: #f4c95d; }
 
     .button {
-      color: white; 
-      padding: 17px; 
-      border: none;
-      border-radius: 14px; 
-      font-size: 1.08em; 
-      margin: 12px 0; 
-      cursor: pointer;
-      width: 100%; 
-      font-weight: 600; 
-      display: block;
-      transition: all 0.3s ease;
+      color: white; padding: 17px; border: none; border-radius: 14px; 
+      font-size: 1.08em; margin: 12px 0; cursor: pointer; width: 100%; 
+      font-weight: 600; display: block; transition: all 0.3s ease;
     }
-
-    .button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 25px rgba(244, 201, 93, 0.3);
-    }
-
+    .button:hover { transform: translateY(-3px); }
     .button.connect { background: #1f5c4a; }
     .button.test    { background: linear-gradient(90deg, #f4c95d, #d4a017); color: #0a1f1a; font-weight: bold; }
     .button.mint    { background: #2e7d5c; }
     .button.stake   { background: #1f5c4a; }
     .button.claim   { background: #c94f2e; }
-
-    .gold-text { color: #f4c95d; }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
-      <img src="apple-touch-icon.png" alt="Canine Farming Protocol" class="logo">
+      <img src="https://raw.githubusercontent.com/ilesanmipepsi/canine_farming/main/apple-touch-icon.png" 
+           alt="Canine Farming Protocol" class="logo">
+      
       <h1>CANINE FARMING</h1>
       <p class="gold-text">Protocol • Sustainable Growth • 10 Million Max Supply</p>
     </div>
@@ -109,13 +74,6 @@
   </div>
 
   <script src="https://sdk.minepi.com/pi-sdk.js"></script>
-  
-  <script>
-    Pi.init({ version: "2.0", sandbox: true })
-      .then(() => console.log("✅ Pi SDK Initialized"))
-      .catch(err => console.error("Pi Init Failed:", err));
-  </script>
-
   <script src="app.js"></script>
 </body>
-</html>
+  </html>
