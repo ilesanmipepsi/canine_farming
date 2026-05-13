@@ -5,9 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Canine Farming Protocol</title>
   
-  <!-- Icons -->
-<link rel="icon" type="image/png" href="/favicon.png">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <!-- Correct paths for public folder -->
+  <link rel="icon" type="image/png" href="public/favicon.png">
+  <link rel="apple-touch-icon" href="public/apple-touch-icon.png">
+
   <style>
     body { 
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
@@ -26,8 +27,7 @@
       padding: 30px 20px;
       border-radius: 20px;
       margin-bottom: 25px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
-      border: 1px solid #1f5c4a;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.7);
     }
 
     .logo {
@@ -46,19 +46,7 @@
       letter-spacing: 2px;
     }
 
-    .header p {
-      margin: 0;
-      opacity: 0.95;
-      font-size: 1.05em;
-    }
-
-    .info { 
-      background: #112d26; 
-      padding: 20px; 
-      border-radius: 16px; 
-      margin: 15px 0; 
-      border: 1px solid #1f5c4a;
-    }
+    .gold-text { color: #f4c95d; }
 
     .button {
       color: white; 
@@ -71,27 +59,15 @@
       width: 100%; 
       font-weight: 600; 
       display: block;
-      transition: all 0.3s ease;
     }
-
-    .button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 25px rgba(244, 201, 93, 0.3);
-    }
-
-    .button.connect { background: #1f5c4a; }
-    .button.test    { background: linear-gradient(90deg, #f4c95d, #d4a017); color: #0a1f1a; font-weight: bold; }
-    .button.mint    { background: #2e7d5c; }
-    .button.stake   { background: #1f5c4a; }
-    .button.claim   { background: #c94f2e; }
-
-    .gold-text { color: #f4c95d; }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
-<img src="/apple-touch-icon.png" alt="Canine Farming Protocol" class="logo">
+      <img src="public/apple-touch-icon.png" 
+           alt="Canine Farming Protocol" class="logo">
+      
       <h1>CANINE FARMING</h1>
       <p class="gold-text">Protocol • Sustainable Growth • 10 Million Max Supply</p>
     </div>
@@ -100,7 +76,7 @@
       <h2>Session Status: <span id="username" class="gold-text">Uninitialized</span></h2>
     </div>
     
-    <button id="connect" class="button connect">Initialize Pi Session</button>
+    <button id="connect" class="button">Initialize Pi Session</button>
     <button class="button test">Verify Step 10 (0.1 Pi)</button>
     <button class="button mint">Mint $CFM</button>
     <button class="button stake">Stake $CFM</button>
@@ -108,13 +84,6 @@
   </div>
 
   <script src="https://sdk.minepi.com/pi-sdk.js"></script>
-  
-  <script>
-    Pi.init({ version: "2.0", sandbox: true })
-      .then(() => console.log("✅ Pi SDK Initialized"))
-      .catch(err => console.error("Pi Init Failed:", err));
-  </script>
-
   <script src="app.js"></script>
 </body>
 </html>
