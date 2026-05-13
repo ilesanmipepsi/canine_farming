@@ -1,6 +1,9 @@
 {
   "version": 2,
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api" }
+    { "source": "/apple-touch-icon.png", "destination": "/public/apple-touch-icon.png" },
+    { "source": "/favicon.png", "destination": "/public/favicon.png" },
+    { "source": "/api/(.*)", "destination": "/api" },
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
