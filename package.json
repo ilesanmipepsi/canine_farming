@@ -1,4 +1,4 @@
-1{
+{
   "name": "canine-farming-protocol",
   "version": "1.0.0",
   "description": "Canine Farming Protocol - Sustainable Proof of Stake Ecosystem",
@@ -10,7 +10,7 @@
     "deploy": "vercel --prod"
   },
   "engines": {
-    "node": "18.x || 20.x"
+    "node": "18.x"
   },
   "dependencies": {
     "express": "^4.19.2",
