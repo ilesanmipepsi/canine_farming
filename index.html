@@ -16,8 +16,8 @@
     }
     .container { max-width: 420px; margin: 0 auto; padding: 15px; }
     .header {
-      background: linear-gradient(135deg, #8b5e3c, #5d3a1a) !important;
-      color: white !important;
+      background: linear-gradient(135deg, #8b5e3c, #5d3a1a);
+      color: white;
       padding: 20px;
       border-radius: 15px;
       margin-bottom: 20px;
@@ -29,11 +29,8 @@
       width: 100%; font-weight: bold; display: block;
     }
     .button.stake   { background: #10b981; } 
-    .button.shop    { background: #8b5e3c; } 
-    .button.market  { background: #f59e0b; } 
-    .button.claim   { background: #ef4444; } 
     .button.test    { background: #6366f1; } 
-    
+    .button.claim   { background: #ef4444; } 
     .info { 
       background: #2d2d2d; 
       padding: 15px; 
@@ -41,12 +38,9 @@
       margin: 12px 0; 
       border: 1px solid #444;
     }
-    h1 { margin: 0; font-size: 1.5em; }
-    p { opacity: 0.8; font-size: 0.9em; margin: 5px 0 0 0; }
   </style>
 </head>
 <body>
-
   <div class="container">
     <div class="header">
       <h1>Canine Farming Protocol</h1>
@@ -63,11 +57,23 @@
     <button class="button shop">Kennel Supply Store</button>
     <button class="button market">P2P Marketplace</button>
     <button class="button stake">Stake $CFM for Yield</button>
-    <button id="claim" class="button claim">Harvest Rewards</button>
+    <button class="button claim">Harvest Rewards</button>
   </div>
 
-  <!-- FIXED: Canonical Pi Network SDK Script URL -->
   <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+  
+  <!-- IMPORTANT: Initialize Pi SDK Here -->
+  <script>
+    Pi.init({ 
+      version: "2.0", 
+      sandbox: true 
+    }).then(() => {
+      console.log("✅ Pi SDK Initialized Successfully");
+    }).catch(err => {
+      console.error("Pi Init Failed:", err);
+    });
+  </script>
+
   <script src="app.js"></script>
 </body>
 </html>
