@@ -7,7 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
         connectBtn.onclick = async () => {
             try {
                 const auth = await window.Pi.authenticate(['username', 'payments'], onIncompletePaymentFound);
-                
                 document.getElementById('username').innerText = auth.user.username || 'Connected';
                 alert('✅ Wallet connected: ' + auth.user.username);
             } catch (err) {
@@ -17,7 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // Verify Step 10 Button
     document.querySelectorAll('.test').forEach(btn => {
         btn.onclick = async (e) => {
             const targetBtn = e.target;
@@ -30,20 +28,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     memo: "Step 10 Verification",
                     metadata: { action: "test_buy" }
                 }, {
-                    onReadyForServerApproval: (paymentId) => {
-                        return fetch(`${BACKEND_URL}/api/payments/approve`, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ paymentId })
-                        }).then(res => res.ok ? res.json() : Promise.reject("Approval failed"));
-                    },
-                    onReadyForServerCompletion: (paymentId, txid) => {
-                        return fetch(`${BACKEND_URL}/api/payments/complete`, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ paymentId, txid })
-                        }).then(res => res.ok ? res.json() : Promise.reject("Completion failed"));
-                    },
+                    onReadyForServerApproval: (paymentId) => fetch(`${BACKEND_URL}/api/payments/approve`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ paymentId })
+                    }).then(res => res.ok ? res.json() : Promise.reject("Approval failed")),
+
+                    onReadyForServerCompletion: (paymentId, txid) => fetch(`${BACKEND_URL}/api/payments/complete`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ paymentId, txid })
+                    }).then(res => res.ok ? res.json() : Promise.reject("Completion failed")),
+
                     onCancel: () => targetBtn.innerText = originalText,
                     onError: (error) => {
                         alert("Payment Error: " + error.message);
@@ -65,4 +61,4 @@ function onIncompletePaymentFound(payment) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ paymentId: payment.identifier, txid: "AUTO_CLEARED" })
     }).catch(() => {});
-                                      }
+        }
