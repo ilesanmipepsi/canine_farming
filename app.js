@@ -1,76 +1,86 @@
-// 1. CONFIGURATION
-const BACKEND_URL = 'https://canine-farming.vercel.app'; 
+// 1. ENVIRONMENT CONFIGURATION
+const BACKEND_URL = 'vercel.app'; 
 
-// IMPORTANT: MUST be true for Testnet (Step 10 checklist)
+// Sandbox testing validation parameters (Required for Step 10)
 window.Pi.init({ version: "2.0", sandbox: true }); 
 
-// 2. CONNECT WALLET LOGIC
+// 2. CRYPTO WALLET CONNECT HANDSHAKE
 const connectBtn = document.getElementById('connect');
 if (connectBtn) {
   connectBtn.onclick = async () => {
     try {
       const auth = await window.Pi.authenticate(['username', 'payments'], (payment) => {
-        console.log('Incomplete payment found', payment);
+        console.log('Incomplete token processing instance caught:', payment);
       });
       
       document.getElementById('username').innerText = auth.user.username;
-      document.getElementById('home').style.display = 'none';
-      document.getElementById('dashboard').style.display = 'block';
+      alert('Wallet successfully recognized: ' + auth.user.username);
     } catch (err) {
-      alert('Connect failed: ' + err.message);
+      alert('Initialization aborted: ' + err.message);
     }
   };
 }
 
-// 3. PAYMENT LOGIC (User-to-App)
+// 3. SECURE BLOCKCHAIN TRANSACTION TRIGGER (User-To-App Checkout Modal)
 document.querySelectorAll('.test').forEach(btn => {
   btn.onclick = async (e) => {
     const targetBtn = e.target;
     const originalText = targetBtn.innerText;
-    targetBtn.innerText = 'Processing...';
+    targetBtn.innerText = 'Invoking Secure Wallet...';
 
     try {
       window.Pi.createPayment({
         amount: 0.1,
-        memo: "Step 10 Verification",
+        memo: "Step 10 Verification Procedure",
         metadata: { action: "test_buy" }
       }, {
+        // Phase A: Node Backend Pre-processing Verification Request
         onReadyForServerApproval: (paymentId) => {
+          console.log("Transmission to validation core initiated:", paymentId);
           return fetch(`${BACKEND_URL}/api/payments/approve`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ paymentId })
           }).then(res => {
-            if (!res.ok) throw new Error("Server failed to approve.");
+            if (!res.ok) throw new Error("Backend infrastructure validation failed.");
             return res.json();
           });
         },
+        
+        // Phase B: Node Backend Block Settlement Submission
         onReadyForServerCompletion: (paymentId, txid) => {
+          console.log("Submitting transaction payload to backend cluster:", paymentId, txid);
           return fetch(`${BACKEND_URL}/api/payments/complete`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ paymentId, txid })
           }).then(res => {
-            if (!res.ok) throw new Error("Server failed to complete.");
-            alert('Success! Checklist step 10 updated.');
+            if (!res.ok) throw new Error("Backend node failed ledger finalization.");
+            alert('Success! Sandbox ledger configuration complete.');
             targetBtn.innerText = originalText;
             return res.json();
           });
         },
-        onCancel: (paymentId) => { targetBtn.innerText = originalText; },
+        
+        onCancel: (paymentId) => { 
+          console.log("Transaction execution cancelled:", paymentId);
+          targetBtn.innerText = originalText; 
+        },
+        
         onError: (error, payment) => { 
-          alert("Payment Error: " + error.message); 
+          console.error("SDK Pipeline Error:", error);
+          alert("Wallet Overlay Interface Error: " + error.message); 
           targetBtn.innerText = originalText; 
         }
       });
     } catch (err) {
-      alert("Failed: " + err.message);
+      alert("Pipeline Execution Halted: " + err.message);
       targetBtn.innerText = originalText;
     }
   };
 });
 
-// 4. GameFi PROTOCOL LOGIC (Stake, Claim, Swap)
+// 4. GameFi PROTOCOL LOGIC (Off-chain Staking and Reward Pools)
 async function handleAction(endpoint) {
   try {
     const response = await fetch(`${BACKEND_URL}/api/${endpoint}`, {
@@ -80,21 +90,16 @@ async function handleAction(endpoint) {
     const data = await response.json();
     alert(data.message);
   } catch (err) {
-    alert("Action failed: " + err.message);
+    alert("Protocol response error: " + err.message);
   }
 }
 
-// Safer button attachment
+// Layout element binding operations
 const stakeBtn = document.querySelector('.button.stake');
 if (stakeBtn) stakeBtn.onclick = () => handleAction('stake');
 
 const claimBtn = document.querySelector('.button.claim');
 if (claimBtn) claimBtn.onclick = () => handleAction('claim');
 
-// Target the Swap button specifically
-document.querySelectorAll('.button').forEach(btn => {
-  if (btn.innerText.includes('Swap')) {
-    btn.onclick = () => handleAction('swap');
-  }
-});
-            
+const mintBtn = document.querySelector('.button.mint-btn');
+if (mintBtn) mintBtn.onclick = () => handleAction('swap');
