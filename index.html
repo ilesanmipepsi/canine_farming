@@ -7,18 +7,18 @@
   <style>
     body { 
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-      background: #1a1a1a; /* Darker, modern crypto theme */
+      background: #1a1a1a; 
       color: #f5f5f5; 
       margin: 0; 
       padding: 0; 
       text-align: center;
-      padding-top: 70px; 
+      padding-top: 20px; 
     }
     .container { max-width: 420px; margin: 0 auto; padding: 15px; }
     .header {
       background: linear-gradient(135deg, #8b5e3c, #5d3a1a) !important;
       color: white !important;
-      padding: 25px;
+      padding: 20px;
       border-radius: 15px;
       margin-bottom: 20px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.5);
@@ -30,22 +30,21 @@
       transition: transform 0.2s;
     }
     .button:active { transform: scale(0.98); }
-    .button.stake   { background: #10b981; } /* Emerald Green */
-    .button.shop    { background: #8b5e3c; } /* Bronze/Wood */
-    .button.market  { background: #f59e0b; } /* Amber */
-    .button.claim   { background: #ef4444; } /* Red */
-    .button.test    { background: #6366f1; } /* Indigo */
+    .button.stake   { background: #10b981; } 
+    .button.shop    { background: #8b5e3c; } 
+    .button.market  { background: #f59e0b; } 
+    .button.claim   { background: #ef4444; } 
+    .button.test    { background: #6366f1; } 
     
     .info { 
       background: #2d2d2d; 
-      padding: 20px; 
+      padding: 15px; 
       border-radius: 12px; 
-      margin: 15px 0; 
+      margin: 12px 0; 
       border: 1px solid #444;
     }
-    #dashboard { display: none; }
-    h1 { margin: 0; font-size: 1.6em; }
-    p { opacity: 0.8; font-size: 0.9em; }
+    h1 { margin: 0; font-size: 1.5em; }
+    p { opacity: 0.8; font-size: 0.9em; margin: 5px 0 0 0; }
   </style>
 </head>
 <body>
@@ -56,32 +55,23 @@
       <p>$CFM GameFi Ecosystem – 400% APY</p>
     </div>
 
-    <!-- AUTH SCREEN -->
-    <div id="home">
-      <div class="info">
-        <p>Initialize your kennel on the Pi Network to start earning yield.</p>
-      </div>
-      <button id="connect" class="button">Initialize Pi Session</button>
-      <button class="button test">Verify Step 10 (0.1 Pi)</button>
+    <!-- CONNECTION SYSTEM -->
+    <div class="info">
+      <h2>Session Status: <span id="username">Uninitialized</span></h2>
     </div>
-
-    <!-- MAIN CONSOLE (Dashboard) -->
-    <div id="dashboard">
-      <div class="info">
-        <h2>Operator: <span id="username">Pioneer</span></h2>
-        <p>Status: Active | Yield: 400% APY</p>
-      </div>
-      
-      <button class="button test">Execute Test Transaction</button>
-      <button class="button">Mint $CFM ($10 Liquidity)</button>
-      <button class="button shop">Kennel Supply Store</button>
-      <button class="button market">P2P Marketplace</button>
-      <button class="button stake">Stake $CFM for Yield</button>
-      <button id="claim" class="button claim">Harvest Rewards</button>
-    </div>
+    
+    <!-- ALL APP SYSTEM CONTROLS OPEN & TESTABLE -->
+    <button id="connect" class="button">Initialize Pi Session</button>
+    <button class="button test">Verify Step 10 (0.1 Pi)</button>
+    <button class="button mint-btn">Mint $CFM ($10 Liquidity)</button>
+    <button class="button shop">Kennel Supply Store</button>
+    <button class="button market">P2P Marketplace</button>
+    <button class="button stake">Stake $CFM for Yield</button>
+    <button id="claim" class="button claim">Harvest Rewards</button>
   </div>
 
-  <script src="https://minepi.com"></script>
+  <!-- Native Pi Network SDK Script Bridge -->
+  <script src="https://sdk.minepi.com/pi-sdk.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
