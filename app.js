@@ -28,7 +28,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('username').innerText = pioneerUsername || 'Connected';
                 alert('✅ Wallet connected successfully: ' + pioneerUsername);
 
-                // Show activation button for new users
+                connectBtn.innerText = "✓ Account Synced";
+                connectBtn.style.opacity = "0.7";
+                connectBtn.style.pointerEvents = "none";
+
                 await checkPioneerActivationStatus(pioneerUsername);
 
             } catch (err) {
@@ -67,6 +70,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         }).then(res => {
                             if (res.ok) {
                                 alert('🚀 Simulation Allocation Activated Successfully!');
+                                targetBtn.innerText = originalText;
+                                targetBtn.disabled = false;
                                 unlockSimulationFeatures(0.000025000000);
                                 return res.json();
                             } else {
@@ -122,7 +127,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (tickerInterval) clearInterval(tickerInterval);
         currentLocalBalance = startingBalance || 0.000025000000;
 
-        document.getElementById('liveBalanceContainer').classList.remove('hidden');
+        const liveContainer = document.getElementById('liveBalanceContainer');
+        if (liveContainer) liveContainer.classList.remove('hidden');
 
         tickerInterval = setInterval(() => {
             if (currentLocalBalance >= 1.0) {
@@ -138,7 +144,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function handleAction(endpoint) {
         try {
-            const res = await fetch(`${BACKEND_URL}/api/${endpoint}`, { method: 'POST' });
+            const res = await fetch(`${BACKEND_URL}/api/${endpoint}`, { 
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: pioneerUsername })
+            });
             const data = await res.json();
             alert(data.message || 'Action completed successfully');
         } catch (err) {
