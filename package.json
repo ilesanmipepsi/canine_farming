@@ -1,19 +1,22 @@
 {
   "name": "canine-farming-protocol",
   "version": "1.0.0",
-  "description": "Canine Farming Protocol",
+  "description": "Canine Farming Protocol - Sustainable Proof of Stake Ecosystem",
   "main": "api/index.js",
   "scripts": {
     "dev": "vercel dev",
-    "build": "echo 'No build required'",
-    "start": "node api/index.js"
+    "build": "echo 'No build step required'",
+    "start": "node api/index.js",
+    "deploy": "vercel --prod"
   },
   "engines": {
-    "node": "20.x"
+    "node": "18.x || 20.x"
   },
   "dependencies": {
     "express": "^4.19.2",
     "cors": "^2.8.5",
     "axios": "^1.7.2"
-  }
+  },
+  "author": "Peter Akintade",
+  "license": "ISC"
 }
