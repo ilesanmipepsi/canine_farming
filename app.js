@@ -28,10 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('username').innerText = pioneerUsername || 'Connected';
                 alert('✅ Wallet connected successfully: ' + pioneerUsername);
 
-                connectBtn.innerText = "✓ Account Synced";
-                connectBtn.style.opacity = "0.7";
-                connectBtn.style.pointerEvents = "none";
-
+                // Show activation button for new users
                 await checkPioneerActivationStatus(pioneerUsername);
 
             } catch (err) {
@@ -41,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // Single-Entry 0.5 Pi Activation
+    // 0.5 Pi Activation Button
     if (payBtn) {
         payBtn.onclick = async (e) => {
             const targetBtn = e.target;
@@ -70,8 +67,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         }).then(res => {
                             if (res.ok) {
                                 alert('🚀 Simulation Allocation Activated Successfully!');
-                                targetBtn.innerText = originalText;
-                                targetBtn.disabled = false;
                                 unlockSimulationFeatures(0.000025000000);
                                 return res.json();
                             } else {
@@ -120,18 +115,30 @@ document.addEventListener('DOMContentLoaded', () => {
         if (stakeBtn) stakeBtn.classList.remove('hidden');
         if (claimBtn) claimBtn.classList.remove('hidden');
 
-        if (typeof startLiveTicker === "function") {
-            startLiveTicker(savedBalance);
-        }
+        startLiveTicker(savedBalance);
+    }
+
+    function startLiveTicker(startingBalance) {
+        if (tickerInterval) clearInterval(tickerInterval);
+        currentLocalBalance = startingBalance || 0.000025000000;
+
+        document.getElementById('liveBalanceContainer').classList.remove('hidden');
+
+        tickerInterval = setInterval(() => {
+            if (currentLocalBalance >= 1.0) {
+                currentLocalBalance = 1.000000000000;
+                clearInterval(tickerInterval);
+            } else {
+                currentLocalBalance += REWARD_PER_MS;
+            }
+            const tickerEl = document.getElementById('cfmTicker');
+            if (tickerEl) tickerEl.innerText = currentLocalBalance.toFixed(12);
+        }, 50);
     }
 
     async function handleAction(endpoint) {
         try {
-            const res = await fetch(`${BACKEND_URL}/api/${endpoint}`, { 
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username: pioneerUsername })
-            });
+            const res = await fetch(`${BACKEND_URL}/api/${endpoint}`, { method: 'POST' });
             const data = await res.json();
             alert(data.message || 'Action completed successfully');
         } catch (err) {
@@ -152,22 +159,3 @@ function onIncompletePaymentFound(payment) {
         body: JSON.stringify({ paymentId: payment.identifier, txid: "AUTO_CLEARED" })
     }).catch(() => {});
 }
-
-// Live Ticker Function (from your tweaked code)
-function startLiveTicker(startingBalance) {
-    if (tickerInterval) clearInterval(tickerInterval);
-    currentLocalBalance = startingBalance || 0.000025;
-
-    document.getElementById('liveBalanceContainer').classList.remove('hidden');
-
-    tickerInterval = setInterval(() => {
-        if (currentLocalBalance >= 1.0) {
-            currentLocalBalance = 1.000000000000;
-            clearInterval(tickerInterval);
-        } else {
-            currentLocalBalance += REWARD_PER_MS;
-        }
-        const tickerEl = document.getElementById('cfmTicker');
-        if (tickerEl) tickerEl.innerText = currentLocalBalance.toFixed(12);
-    }, 50);
-                    }
