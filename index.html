@@ -1,131 +1,166 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Canine Farming Protocol</title>
-  
-  <link rel="icon" type="image/png" href="favicon.png">
-  <link rel="apple-touch-icon" href="apple-touch-icon.png">
-
-  <style>
-    body { 
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-      background: linear-gradient(180deg, #0a1f1a, #05120f);
-      color: #e8e8e8; 
-      margin: 0; 
-      padding: 0; 
-      text-align: center;
-      line-height: 1.6;
-    }
-    .container { max-width: 460px; margin: 0 auto; padding: 20px 15px; }
-
-    .header {
-      background: linear-gradient(135deg, #0f2e24, #1a3f32);
-      color: white;
-      padding: 40px 20px 30px;
-      border-radius: 24px;
-      margin-bottom: 25px;
-      box-shadow: 0 10px 35px rgba(0,0,0,0.6);
-    }
-
-    .logo {
-      width: 130px;
-      height: 130px;
-      border-radius: 50%;
-      border: 5px solid #f4c95d;
-      margin-bottom: 20px;
-      box-shadow: 0 8px 30px rgba(244, 201, 93, 0.5);
-    }
-
-    .header h1 {
-      margin: 0 0 10px 0;
-      font-size: 2.35em;
-      color: #f4c95d;
-      letter-spacing: 3px;
-    }
-
-    .gold-text { color: #f4c95d; }
-
-    .info { 
-      background: #112d26; 
-      padding: 24px; 
-      border-radius: 16px; 
-      margin: 20px 0; 
-      border: 1px solid #1f5c4a;
-      text-align: left;
-    }
-
-    .button {
-      color: white; 
-      padding: 18px; 
-      border: none;
-      border-radius: 14px; 
-      font-size: 1.1em; 
-      margin: 10px 0; 
-      cursor: pointer;
-      width: 100%; 
-      font-weight: 600; 
-      display: block;
-      transition: all 0.3s ease;
-    }
-
-    .button:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(244, 201, 93, 0.3); }
-    .button.connect { background: #1f5c4a; }
-    .button.test    { background: linear-gradient(90deg, #f4c95d, #d4a017); color: #0a1f1a; font-weight: bold; }
-    .button.mint    { background: #2e7d5c; }
-    .button.stake   { background: #1f5c4a; }
-    .button.claim   { background: #c94f2e; }
-
-    .hidden { display: none !important; }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <div class="header">
-      <img src="apple-touch-icon.png" alt="Canine Farming Protocol" class="logo">
-      <h1>CANINE FARMING</h1>
-      <p class="gold-text">Protocol • Sustainable Growth • 10M Max Supply</p>
-    </div>
-
-    <div class="info">
-      <h2>Session Status: <span id="username" class="gold-text">Uninitialized</span></h2>
-    </div>
-    
-    <button id="connect" class="button connect">Initialize Pi Session</button>
-    <button class="button test">Verify Step 10 (0.1 Pi)</button>
-
-    <button id="mintBtn" class="button mint hidden">Mint $CFM</button>
-    <button id="stakeBtn" class="button stake hidden">Stake $CFM</button>
-    <button id="claimBtn" class="button claim hidden">Harvest Rewards</button>
-
-    <!-- Vision -->
-    <div class="info">
-      <h3 style="color:#f4c95d; margin-top:0;">Our Vision</h3>
-      <p>Inspired by the sustainable exponential growth of the German Shepherd population, Canine Farming Protocol is a disciplined, community-first Proof of Stake ecosystem with a strict hard cap of 10 million tokens.</p>
-    </div>
-
-    <!-- Roadmap -->
-    <div class="info">
-      <h3 style="color:#f4c95d;">Roadmap</h3>
-      <p><strong>Phase 1:</strong> Testnet Launch & Pioneer Distribution<br>
-         <strong>Phase 2:</strong> Staking Rewards & Ecosystem Growth<br>
-         <strong>Phase 3:</strong> Build Major CEX for $CFM holders</p>
-    </div>
-  </div>
-
-  <footer style="margin:40px 0 20px; opacity:0.6; font-size:0.9em;">
-    Powered by Pi Network • Transparency • Sustainability • Community
-  </footer>
-
-  <script src="https://sdk.minepi.com/pi-sdk.js"></script>
-  
-  <script>
-    Pi.init({ version: "2.0", sandbox: true })
-      .then(() => console.log("✅ Pi SDK Initialized"))
-      .catch(err => console.error("Pi Init Failed:", err));
-  </script>
-
-  <script src="app.js"></script>
-</body>
-</html>
+‎<!DOCTYPE html>
+‎<html lang="en">
+‎<head>
+‎  <meta charset="UTF-8" />
+‎  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+‎  <title>Canine Farming Protocol</title>
+‎  
+‎  <link rel="icon" type="image/png" href="favicon.png">
+‎  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+‎
+‎  <style>
+‎    body { 
+‎      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+‎      background: linear-gradient(180deg, #0a1f1a, #05120f);
+‎      color: #e8e8e8; 
+‎      margin: 0; 
+‎      padding: 0; 
+‎      text-align: center;
+‎      line-height: 1.6;
+‎    }
+‎    .container { max-width: 460px; margin: 0 auto; padding: 20px 15px; }
+‎
+‎    .header {
+‎      background: linear-gradient(135deg, #0f2e24, #1a3f32);
+‎      color: white;
+‎      padding: 40px 20px 30px;
+‎      border-radius: 24px;
+‎      margin-bottom: 25px;
+‎      box-shadow: 0 10px 35px rgba(0,0,0,0.6);
+‎    }
+‎
+‎    .logo {
+‎      width: 130px;
+‎      height: 130px;
+‎      border-radius: 50%;
+‎      border: 5px solid #f4c95d;
+‎      margin-bottom: 20px;
+‎      box-shadow: 0 8px 30px rgba(244, 201, 93, 0.5);
+‎    }
+‎
+‎    .header h1 {
+‎      margin: 0 0 10px 0;
+‎      font-size: 2.35em;
+‎      color: #f4c95d;
+‎      letter-spacing: 3px;
+‎    }
+‎
+‎    .gold-text { color: #f4c95d; }
+‎
+‎    .info { 
+‎      background: #112d26; 
+‎      padding: 24px; 
+‎      border-radius: 16px; 
+‎      margin: 20px 0; 
+‎      border: 1px solid #1f5c4a;
+‎      text-align: left;
+‎    }
+‎
+‎    .balance-display {
+‎      font-size: 1.8em;
+‎      font-weight: bold;
+‎      text-align: center;
+‎      margin-top: 10px;
+‎      font-family: monospace;
+‎    }
+‎
+‎    .button {
+‎      color: white; 
+‎      padding: 18px; 
+‎      border: none;
+‎      border-radius: 14px; 
+‎      font-size: 1.1em; 
+‎      margin: 10px 0; 
+‎      cursor: pointer;
+‎      width: 100%; 
+‎      font-weight: 600; 
+‎      display: block;
+‎      transition: all 0.3s ease;
+‎    }
+‎
+‎    .button:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(244, 201, 93, 0.3); }
+‎    .button.connect { background: #1f5c4a; }
+‎    .button.connect.synced { background: #2e7d5c !important; cursor: default; transform: none; box-shadow: none; }
+‎    .button.test    { background: linear-gradient(90deg, #f4c95d, #d4a017); color: #0a1f1a; font-weight: bold; }
+‎    .button.mint    { background: #2e7d5c; }
+‎    .button.stake   { background: #1f5c4a; }
+‎    .button.claim   { background: #c94f2e; }
+‎
+‎    .hidden { display: none !important; }
+‎  </style>
+‎</head>
+‎<body>
+‎  <div class="container">
+‎    <div class="header">
+‎      <img src="apple-touch-icon.png" alt="Canine Farming Protocol" class="logo">
+‎      <h1>CANINE FARMING</h1>
+‎      <p class="gold-text">Protocol • Sustainable Growth • 10M Max Supply</p>
+‎    </div>
+‎
+‎    <div class="info">
+‎      <h2>Session Status: <span id="username" class="gold-text">Uninitialized</span></h2>
+‎      <div id="liveBalanceContainer" class="hidden">
+‎        <h4 style="margin: 10px 0 0 0; color: #1f5c4a; text-align: center;">Live Staking Simulator</h4>
+‎        <div id="cfmTicker" class="balance-display gold-text">0.000025000000</div>
+‎      </div>
+‎    </div>
+‎    
+‎    <button id="connect" class="button connect">Initialize Pi Session</button>
+‎    <button id="payBtn" class="button test hidden">Activate Simulation Allocation (0.5 Test-Pi)</button>
+‎    <button id="mintBtn" class="button mint hidden">Claim $CFM Tokens</button>
+‎    <button id="stakeBtn" class="button stake hidden">Stake $CFM</button>
+‎    <button id="claimBtn" class="button claim hidden">Harvest Rewards</button>
+‎
+‎    <!-- Vision -->
+‎    <div class="info">
+‎      <h3 style="color:#f4c95d; margin-top:0;">Our Vision</h3>
+‎      <p>Inspired by the sustainable growth patterns of canine populations, Canine Farming Protocol is a gamified Proof-of-Stake simulation built exclusively for the Pi Network ecosystem. The protocol relies on a disciplined utility infrastructure capped at 10,000,000 $CFM simulation tokens.</p>
+‎    </div>
+‎
+‎    <!-- Roadmap -->
+‎    <div class="info">
+‎      <h3 style="color:#f4c95d;">Roadmap</h3>
+‎      <p><strong>Phase 1:</strong> Testnet Launch & Pioneer Distribution<br>
+‎         <strong>Phase 2:</strong> Simulation Rewards & Ecosystem Expansion<br>
+‎         <strong>Phase 3:</strong> Expand Ecosystem Utility & Exchange Listings</p>
+‎    </div>
+‎  </div>
+‎
+‎  <footer style="margin:40px 0 20px; opacity:0.6; font-size:0.9em;">
+‎    Powered by Pi Network • Transparency • Sustainability • Community
+‎  </footer>
+‎
+‎  <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+‎  
+‎  <script>
+‎    let tickerInterval = null;
+‎    let currentLocalBalance = 0.000025000000;
+‎    // As calculated: 400% dynamic yearly payout divided into fractional reward per millisecond
+‎    const REWARD_PER_MS = 0.000000000031709; 
+‎
+‎    Pi.init({ version: "2.0", sandbox: true })
+‎      .then(() => console.log("✅ Pi SDK Initialized"))
+‎      .catch(err => console.error("Pi Init Failed:", err));
+‎
+‎    // Simulation Live Ticker Logic
+‎    function startLiveTicker(startingBalance) {
+‎      if(tickerInterval) clearInterval(tickerInterval);
+‎      currentLocalBalance = startingBalance;
+‎      
+‎      document.getElementById('liveBalanceContainer').classList.remove('hidden');
+‎      
+‎      tickerInterval = setInterval(() => {
+‎        if (currentLocalBalance >= 1.0) {
+‎          currentLocalBalance = 1.000000000000;
+‎          clearInterval(tickerInterval);
+‎        } else {
+‎          currentLocalBalance += REWARD_PER_MS;
+‎        }
+‎        document.getElementById('cfmTicker').innerText = currentLocalBalance.toFixed(12);
+‎      }, 1); // Updates smooth every millisecond
+‎    }
+‎  </script>
+‎
+‎  <script src="app.js"></script>
+‎</body>
+‎</html>
