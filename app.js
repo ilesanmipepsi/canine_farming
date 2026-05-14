@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const stakeBtn = document.getElementById('stakeBtn');
     const claimBtn = document.getElementById('claimBtn');
 
-    // Hide all action buttons initially
+    // Hide action buttons initially
     if (mintBtn) mintBtn.classList.add('hidden');
     if (stakeBtn) stakeBtn.classList.add('hidden');
     if (claimBtn) claimBtn.classList.add('hidden');
@@ -21,12 +21,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('username').innerText = auth.user.username || 'Connected';
                 alert('✅ Wallet connected successfully: ' + auth.user.username);
 
-                // Show the other buttons
+                // Reveal other buttons
                 if (mintBtn) mintBtn.classList.remove('hidden');
                 if (stakeBtn) stakeBtn.classList.remove('hidden');
                 if (claimBtn) claimBtn.classList.remove('hidden');
 
-                // Disable connect button after success
                 connectBtn.style.opacity = "0.7";
                 connectBtn.style.pointerEvents = "none";
 
@@ -37,12 +36,13 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // Verify Step 10 Button
+    // Verify Step 10 Payment
     document.querySelectorAll('.test').forEach(btn => {
         btn.onclick = async (e) => {
             const targetBtn = e.target;
             const originalText = targetBtn.innerText;
             targetBtn.innerText = 'Processing...';
+            targetBtn.disabled = true;
 
             try {
                 window.Pi.createPayment({
@@ -62,22 +62,36 @@ document.addEventListener('DOMContentLoaded', () => {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ paymentId, txid })
-                        }).then(res => res.ok ? res.json() : Promise.reject("Completion failed"));
+                        }).then(res => {
+                            if (res.ok) {
+                                alert('✅ Transaction processed successfully!');
+                                targetBtn.innerText = originalText;
+                                targetBtn.disabled = false;
+                                return res.json();
+                            } else {
+                                throw new Error("Completion failed");
+                            }
+                        });
                     },
-                    onCancel: () => targetBtn.innerText = originalText,
+                    onCancel: () => {
+                        targetBtn.innerText = originalText;
+                        targetBtn.disabled = false;
+                    },
                     onError: (error) => {
                         alert("Payment Error: " + error.message);
                         targetBtn.innerText = originalText;
+                        targetBtn.disabled = false;
                     }
                 });
             } catch (err) {
                 alert("Error: " + err.message);
                 targetBtn.innerText = originalText;
+                targetBtn.disabled = false;
             }
         };
     });
 
-    // Action Handlers
+    // Other Actions
     async function handleAction(endpoint) {
         try {
             const res = await fetch(`${BACKEND_URL}/api/${endpoint}`, { method: 'POST' });
