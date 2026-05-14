@@ -7,6 +7,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const stakeBtn = document.getElementById('stakeBtn');
     const claimBtn = document.getElementById('claimBtn');
 
+    // Hide all action buttons initially
+    if (mintBtn) mintBtn.classList.add('hidden');
+    if (stakeBtn) stakeBtn.classList.add('hidden');
+    if (claimBtn) claimBtn.classList.add('hidden');
+
     // Initialize Pi Session
     if (connectBtn) {
         connectBtn.onclick = async () => {
@@ -16,13 +21,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('username').innerText = auth.user.username || 'Connected';
                 alert('✅ Wallet connected successfully: ' + auth.user.username);
 
-                // Show the other buttons after successful connection
+                // Show the other buttons
                 if (mintBtn) mintBtn.classList.remove('hidden');
                 if (stakeBtn) stakeBtn.classList.remove('hidden');
                 if (claimBtn) claimBtn.classList.remove('hidden');
 
-                // Optionally disable connect button after success
-                connectBtn.style.opacity = "0.6";
+                // Disable connect button after success
+                connectBtn.style.opacity = "0.7";
                 connectBtn.style.pointerEvents = "none";
 
             } catch (err) {
@@ -32,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // Verify Step 10
+    // Verify Step 10 Button
     document.querySelectorAll('.test').forEach(btn => {
         btn.onclick = async (e) => {
             const targetBtn = e.target;
@@ -72,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     });
 
-    // Other Actions
+    // Action Handlers
     async function handleAction(endpoint) {
         try {
             const res = await fetch(`${BACKEND_URL}/api/${endpoint}`, { method: 'POST' });
