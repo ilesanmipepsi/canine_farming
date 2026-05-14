@@ -11,48 +11,57 @@
   <style>
     body { 
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-      background: #0a1f1a; 
+      background: linear-gradient(180deg, #0a1f1a, #05120f);
       color: #e8e8e8; 
       margin: 0; 
       padding: 0; 
       text-align: center;
-      padding-top: 20px; 
+      line-height: 1.6;
     }
-    .container { max-width: 460px; margin: 0 auto; padding: 15px; }
+    .container { max-width: 460px; margin: 0 auto; padding: 20px 15px; }
 
     .header {
       background: linear-gradient(135deg, #0f2e24, #1a3f32);
       color: white;
-      padding: 30px 20px;
-      border-radius: 20px;
+      padding: 40px 20px 30px;
+      border-radius: 24px;
       margin-bottom: 25px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.7);
+      box-shadow: 0 10px 35px rgba(0,0,0,0.6);
     }
 
     .logo {
-      width: 110px;
-      height: 110px;
+      width: 130px;
+      height: 130px;
       border-radius: 50%;
-      border: 4px solid #f4c95d;
-      margin-bottom: 15px;
-      box-shadow: 0 6px 20px rgba(244, 201, 93, 0.4);
+      border: 5px solid #f4c95d;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 30px rgba(244, 201, 93, 0.5);
     }
 
     .header h1 {
-      margin: 10px 0 8px 0;
-      font-size: 2.1em;
+      margin: 0 0 10px 0;
+      font-size: 2.3em;
       color: #f4c95d;
-      letter-spacing: 2px;
+      letter-spacing: 3px;
     }
 
     .gold-text { color: #f4c95d; }
 
+    .info { 
+      background: #112d26; 
+      padding: 22px; 
+      border-radius: 16px; 
+      margin: 18px 0; 
+      border: 1px solid #1f5c4a;
+      text-align: left;
+    }
+
     .button {
       color: white; 
-      padding: 17px; 
+      padding: 18px; 
       border: none;
       border-radius: 14px; 
-      font-size: 1.08em; 
+      font-size: 1.1em; 
       margin: 10px 0; 
       cursor: pointer;
       width: 100%; 
@@ -61,7 +70,7 @@
       transition: all 0.3s ease;
     }
 
-    .button:hover { transform: translateY(-3px); }
+    .button:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(244, 201, 93, 0.3); }
     .button.connect { background: #1f5c4a; }
     .button.test    { background: linear-gradient(90deg, #f4c95d, #d4a017); color: #0a1f1a; font-weight: bold; }
     .button.mint    { background: #2e7d5c; }
@@ -86,10 +95,19 @@
     <button id="connect" class="button connect">Initialize Pi Session</button>
     <button class="button test">Verify Step 10 (0.1 Pi)</button>
 
-    <!-- These will be hidden initially -->
     <button id="mintBtn" class="button mint hidden">Mint $CFM</button>
     <button id="stakeBtn" class="button stake hidden">Stake $CFM</button>
     <button id="claimBtn" class="button claim hidden">Harvest Rewards</button>
+
+    <!-- Project Vision -->
+    <div class="info">
+      <h3 style="color:#f4c95d; margin-top:0;">Our Vision</h3>
+      <p style="opacity:0.9;">
+        Inspired by the sustainable exponential growth of the German Shepherd dog population, 
+        Canine Farming Protocol is a community-first Proof of Stake ecosystem with a strict 
+        10 million token hard cap. Early pioneers are rewarded generously while maintaining long-term sustainability.
+      </p>
+    </div>
   </div>
 
   <script src="https://sdk.minepi.com/pi-sdk.js"></script>
