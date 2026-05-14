@@ -1,13 +1,19 @@
 const BACKEND_URL = 'https://canine-farming.vercel.app';
+let pioneerUsername = null;
+let tickerInterval = null;
+let currentLocalBalance = 0.000025000000;
+const REWARD_PER_MS = 0.000000000031709;
 
 document.addEventListener('DOMContentLoaded', () => {
 
     const connectBtn = document.getElementById('connect');
+    const payBtn = document.getElementById('payBtn');
     const mintBtn = document.getElementById('mintBtn');
     const stakeBtn = document.getElementById('stakeBtn');
     const claimBtn = document.getElementById('claimBtn');
 
     // Hide advanced buttons initially
+    if (payBtn) payBtn.classList.add('hidden');
     if (mintBtn) mintBtn.classList.add('hidden');
     if (stakeBtn) stakeBtn.classList.add('hidden');
     if (claimBtn) claimBtn.classList.add('hidden');
@@ -18,17 +24,15 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const auth = await window.Pi.authenticate(['username', 'payments'], onIncompletePaymentFound);
                 
-                document.getElementById('username').innerText = auth.user.username || 'Connected';
-                alert('✅ Wallet connected successfully: ' + auth.user.username);
+                pioneerUsername = auth.user.username;
+                document.getElementById('username').innerText = pioneerUsername || 'Connected';
+                alert('✅ Wallet connected successfully: ' + pioneerUsername);
 
-                // Reveal the full feature buttons
-                if (mintBtn) mintBtn.classList.remove('hidden');
-                if (stakeBtn) stakeBtn.classList.remove('hidden');
-                if (claimBtn) claimBtn.classList.remove('hidden');
-
-                // Disable connect button after success
+                connectBtn.innerText = "✓ Account Synced";
                 connectBtn.style.opacity = "0.7";
                 connectBtn.style.pointerEvents = "none";
+
+                await checkPioneerActivationStatus(pioneerUsername);
 
             } catch (err) {
                 console.error(err);
@@ -37,19 +41,19 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // Verify Step 10 Payment
-    document.querySelectorAll('.test').forEach(btn => {
-        btn.onclick = async (e) => {
+    // Single-Entry 0.5 Pi Activation
+    if (payBtn) {
+        payBtn.onclick = async (e) => {
             const targetBtn = e.target;
             const originalText = targetBtn.innerText;
-            targetBtn.innerText = 'Processing...';
+            targetBtn.innerText = 'Processing Allocation...';
             targetBtn.disabled = true;
 
             try {
                 window.Pi.createPayment({
-                    amount: 0.1,
-                    memo: "Step 10 Verification - Canine Farming",
-                    metadata: { action: "test_buy" }
+                    amount: 0.5,
+                    memo: "Canine Farming Protocol - Single Entry Simulation Activation",
+                    metadata: { action: "activation_buy" }
                 }, {
                     onReadyForServerApproval: (paymentId) => {
                         return fetch(`${BACKEND_URL}/api/payments/approve`, {
@@ -62,12 +66,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         return fetch(`${BACKEND_URL}/api/payments/complete`, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ paymentId, txid })
+                            body: JSON.stringify({ paymentId, txid, username: pioneerUsername })
                         }).then(res => {
                             if (res.ok) {
-                                alert('✅ Transaction processed successfully!');
+                                alert('🚀 Simulation Allocation Activated Successfully!');
                                 targetBtn.innerText = originalText;
                                 targetBtn.disabled = false;
+                                unlockSimulationFeatures(0.000025000000);
                                 return res.json();
                             } else {
                                 throw new Error("Completion failed");
@@ -90,12 +95,43 @@ document.addEventListener('DOMContentLoaded', () => {
                 targetBtn.disabled = false;
             }
         };
-    });
+    }
 
-    // Handle other actions
+    async function checkPioneerActivationStatus(username) {
+        try {
+            const response = await fetch(`${BACKEND_URL}/api/user-status?username=${username}`);
+            const data = await response.json();
+
+            if (data.hasActivated) {
+                unlockSimulationFeatures(data.currentCfmBalance || 0.000025);
+            } else {
+                if (payBtn) payBtn.classList.remove('hidden');
+            }
+        } catch (err) {
+            console.error("Status check failed:", err);
+            if (payBtn) payBtn.classList.remove('hidden');
+        }
+    }
+
+    function unlockSimulationFeatures(savedBalance) {
+        if (payBtn) payBtn.classList.add('hidden');
+        
+        if (mintBtn) mintBtn.classList.remove('hidden');
+        if (stakeBtn) stakeBtn.classList.remove('hidden');
+        if (claimBtn) claimBtn.classList.remove('hidden');
+
+        if (typeof startLiveTicker === "function") {
+            startLiveTicker(savedBalance);
+        }
+    }
+
     async function handleAction(endpoint) {
         try {
-            const res = await fetch(`${BACKEND_URL}/api/${endpoint}`, { method: 'POST' });
+            const res = await fetch(`${BACKEND_URL}/api/${endpoint}`, { 
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: pioneerUsername })
+            });
             const data = await res.json();
             alert(data.message || 'Action completed successfully');
         } catch (err) {
@@ -116,3 +152,22 @@ function onIncompletePaymentFound(payment) {
         body: JSON.stringify({ paymentId: payment.identifier, txid: "AUTO_CLEARED" })
     }).catch(() => {});
 }
+
+// Live Ticker Function (from your tweaked code)
+function startLiveTicker(startingBalance) {
+    if (tickerInterval) clearInterval(tickerInterval);
+    currentLocalBalance = startingBalance || 0.000025;
+
+    document.getElementById('liveBalanceContainer').classList.remove('hidden');
+
+    tickerInterval = setInterval(() => {
+        if (currentLocalBalance >= 1.0) {
+            currentLocalBalance = 1.000000000000;
+            clearInterval(tickerInterval);
+        } else {
+            currentLocalBalance += REWARD_PER_MS;
+        }
+        const tickerEl = document.getElementById('cfmTicker');
+        if (tickerEl) tickerEl.innerText = currentLocalBalance.toFixed(12);
+    }, 50);
+                    }
