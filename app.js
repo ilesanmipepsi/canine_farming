@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // 0.5 Pi Activation Button
+    // Single-Entry 0.5 Test-Pi Allocation Activation
     if (payBtn) {
         payBtn.onclick = async (e) => {
             const targetBtn = e.target;
