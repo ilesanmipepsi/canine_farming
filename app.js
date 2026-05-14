@@ -2,8 +2,12 @@ const BACKEND_URL = 'https://canine-farming.vercel.app';
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    // Initialize Pi Session
     const connectBtn = document.getElementById('connect');
+    const mintBtn = document.getElementById('mintBtn');
+    const stakeBtn = document.getElementById('stakeBtn');
+    const claimBtn = document.getElementById('claimBtn');
+
+    // Initialize Pi Session
     if (connectBtn) {
         connectBtn.onclick = async () => {
             try {
@@ -11,6 +15,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 document.getElementById('username').innerText = auth.user.username || 'Connected';
                 alert('✅ Wallet connected successfully: ' + auth.user.username);
+
+                // Show the other buttons after successful connection
+                if (mintBtn) mintBtn.classList.remove('hidden');
+                if (stakeBtn) stakeBtn.classList.remove('hidden');
+                if (claimBtn) claimBtn.classList.remove('hidden');
+
+                // Optionally disable connect button after success
+                connectBtn.style.opacity = "0.6";
+                connectBtn.style.pointerEvents = "none";
+
             } catch (err) {
                 console.error(err);
                 alert('Auth failed: ' + (err.message || err));
@@ -69,9 +83,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    document.querySelector('.button.stake').onclick = () => handleAction('stake');
-    document.querySelector('.button.claim').onclick = () => handleAction('claim');
-    document.querySelector('.button.mint').onclick = () => handleAction('swap');
+    if (stakeBtn) stakeBtn.onclick = () => handleAction('stake');
+    if (claimBtn) claimBtn.onclick = () => handleAction('claim');
+    if (mintBtn) mintBtn.onclick = () => handleAction('swap');
 });
 
 function onIncompletePaymentFound(payment) {
