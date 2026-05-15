@@ -84,7 +84,19 @@
     .button.mint    { background: #2e7d5c; }
     .button.stake   { background: #1f5c4a; }
     .button.claim   { background: #c94f2e; }
-    .button.whitepaper { background: #8b5e3c; font-weight: bold; }
+    
+    /* Improved Whitepaper Button */
+    .button.whitepaper {
+      background: linear-gradient(135deg, #8b5e3c, #c19a6b);
+      color: white;
+      font-weight: 700;
+      border: 2px solid #f4c95d;
+      box-shadow: 0 4px 15px rgba(244, 201, 93, 0.3);
+    }
+    .button.whitepaper:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 25px rgba(244, 201, 93, 0.5);
+    }
 
     .hidden { display: none !important; }
   </style>
@@ -111,9 +123,9 @@
     <button id="stakeBtn" class="button stake hidden">Stake $CFM</button>
     <button id="claimBtn" class="button claim hidden">Harvest Rewards</button>
 
-    <!-- New Whitepaper Button -->
-    <a href="whitepaper.html" target="_blank">
-      <button class="button whitepaper">📄 Read Whitepaper</button>
+    <!-- Premium Whitepaper Button -->
+    <a href="whitepaper.html" target="_blank" style="text-decoration: none;">
+      <button class="button whitepaper">📜 Read Official Whitepaper</button>
     </a>
 
     <!-- Vision -->
