@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Canine Farming Protocol - Whitepaper</title>
+  
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+  <style>
+    body { 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+      background: linear-gradient(180deg, #0a1f1a, #05120f);
+      color: #e8e8e8; 
+      margin: 0; 
+      padding: 0; 
+      line-height: 1.8;
+    }
+    .container { max-width: 720px; margin: 0 auto; padding: 40px 20px; }
+
+    .header {
+      background: linear-gradient(135deg, #0f2e24, #1a3f32);
+      color: white;
+      padding: 60px 30px;
+      border-radius: 28px;
+      margin-bottom: 40px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.7);
+      text-align: center;
+      border: 1px solid #1f5c4a;
+    }
+
+    .logo {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 6px solid #f4c95d;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 30px rgba(244, 201, 93, 0.5);
+    }
+
+    .header h1 {
+      margin: 0 0 8px 0;
+      font-size: 2.6em;
+      color: #f4c95d;
+      letter-spacing: 4px;
+    }
+
+    .subtitle {
+      font-size: 1.25em;
+      color: #d1e0d8;
+      margin: 0;
+    }
+
+    .section { 
+      background: #112d26; 
+      padding: 35px; 
+      border-radius: 20px; 
+      margin: 30px 0; 
+      border: 1px solid #1f5c4a;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+    }
+
+    h2 {
+      color: #f4c95d;
+      border-bottom: 3px solid #1f5c4a;
+      padding-bottom: 12px;
+      margin-top: 0;
+      font-size: 1.65em;
+    }
+
+    h3 {
+      color: #f4c95d;
+      margin: 25px 0 12px 0;
+      font-size: 1.3em;
+    }
+
+    p, li {
+      color: #d1dcd6;
+      font-size: 1.05em;
+    }
+
+    ul {
+      padding-left: 25px;
+    }
+
+    li {
+      margin-bottom: 14px;
+    }
+
+    .formula {
+      background: #0a211c;
+      padding: 20px;
+      border-radius: 12px;
+      font-family: 'Courier New', monospace;
+      color: #f4c95d;
+      text-align: center;
+      border-left: 5px solid #f4c95d;
+      margin: 20px 0;
+      font-size: 1.15em;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #1f5c4a;
+      color: white;
+      text-decoration: none;
+      padding: 14px 28px;
+      border-radius: 12px;
+      font-weight: 600;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .back-btn:hover {
+      background: #2e7d5c;
+      transform: translateY(-3px);
+    }
+
+    footer {
+      margin: 60px 0 30px;
+      text-align: center;
+      opacity: 0.75;
+      font-size: 0.95em;
+    }
+
+    .highlight {
+      color: #f4c95d;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="index.html" class="back-btn">← Back to Application</a>
+
+    <div class="header">
+      <img src="apple-touch-icon.png" alt="Canine Farming Protocol" class="logo">
+      <h1>CANINE FARMING</h1>
+      <div class="subtitle">Official Whitepaper • Version 1.1</div>
+      <p style="margin-top:15px; opacity:0.9;">Sustainable Proof-of-Stake Simulation on Pi Network</p>
+    </div>
+
+    <!-- Abstract -->
+    <div class="section">
+      <h2>1. Abstract</h2>
+      <p>The Canine Farming Protocol is a disciplined, community-driven Proof-of-Stake simulation built exclusively for the Pi Network ecosystem. Inspired by the sustainable and exponential growth patterns of German Shepherd populations, the protocol introduces a strictly capped utility token — <span class="highlight">$CFM</span> — with a hard maximum supply of <span class="highlight">10,000,000 tokens</span>.</p>
+      <p>Through gamified staking mechanics and transparent tokenomics, the platform educates users on sustainable blockchain economics while rewarding long-term participation.</p>
+    </div>
+
+    <!-- Core Mechanics -->
+    <div class="section">
+      <h2>2. Core Protocol Mechanics</h2>
+      <ul>
+        <li><strong>Single-Entry Activation:</strong> One-time 0.5 Pi (Testnet) payment to prevent multi-accounting and ensure fair distribution.</li>
+        <li><strong>Initial Seed:</strong> Every activated pioneer receives <strong>0.000025 $CFM</strong> as starting balance.</li>
+        <li><strong>Anti-Whale Protection:</strong> Hard cap of <strong>1.0 $CFM</strong> per wallet — automatic exclusion from reward pool upon reaching limit.</li>
+      </ul>
+    </div>
+
+    <!-- Tokenomics -->
+    <div class="section">
+      <h2>3. Tokenomics</h2>
+      <p><strong>Total Supply:</strong> 10,000,000 $CFM (hard cap)</p>
+      <ul>
+        <li>Initial Circulating Supply: 250 $CFM (0.000025 × 10M Pioneers)</li>
+        <li>Staking Reward Pool: 9,999,750 $CFM</li>
+      </ul>
+      <div class="formula">
+        Early Phase Growth: 400% Annual Expansion<br>
+        Final Phase: 156% Terminal Adjustment
+      </div>
+    </div>
+
+    <!-- Technical Architecture -->
+    <div class="section">
+      <h2>4. Technical Architecture</h2>
+      <ul>
+        <li>Frontend: Pi SDK v2.0 + Responsive HTML/CSS/JS</li>
+        <li>Backend: Node.js on Vercel Edge Network</li>
+        <li>Data Layer: Supabase (PostgreSQL) with Row Level Security</li>
+        <li>Real-time Simulation: Client-side millisecond ticker with server synchronization</li>
+      </ul>
+    </div>
+
+    <footer>
+      Canine Farming Protocol © 2026 • Built for the Pi Network Ecosystem<br>
+      <strong>Transparency • Sustainability • Community Ownership</strong>
+    </footer>
+  </div>
+</body>
+  </html>
