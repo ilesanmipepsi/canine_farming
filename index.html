@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Canine Farming Protocol - Whitepaper</title>
+  <title>Canine Farming Protocol</title>
   
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -15,190 +15,134 @@
       color: #e8e8e8; 
       margin: 0; 
       padding: 0; 
-      line-height: 1.7;
+      text-align: center;
+      line-height: 1.6;
     }
-    .container { max-width: 650px; margin: 0 auto; padding: 30px 20px; }
+    .container { max-width: 460px; margin: 0 auto; padding: 20px 15px; }
 
     .header {
       background: linear-gradient(135deg, #0f2e24, #1a3f32);
       color: white;
-      padding: 40px 20px;
+      padding: 40px 20px 30px;
       border-radius: 24px;
-      margin-bottom: 30px;
+      margin-bottom: 25px;
       box-shadow: 0 10px 35px rgba(0,0,0,0.6);
-      text-align: center;
     }
 
     .logo {
-      width: 100px;
-      height: 100px;
+      width: 130px;
+      height: 130px;
       border-radius: 50%;
-      border: 4px solid #f4c95d;
-      margin-bottom: 15px;
-      box-shadow: 0 8px 25px rgba(244, 201, 93, 0.4);
+      border: 5px solid #f4c95d;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 30px rgba(244, 201, 93, 0.5);
     }
 
     .header h1 {
-      margin: 0 0 5px 0;
-      font-size: 2.2em;
+      margin: 0 0 10px 0;
+      font-size: 2.35em;
       color: #f4c95d;
-      letter-spacing: 2px;
+      letter-spacing: 3px;
     }
 
-    .subtitle {
-      color: #e8e8e8;
-      font-weight: 600;
-      letter-spacing: 1px;
-      margin-top: 5px;
-      font-size: 1.1em;
-    }
+    .gold-text { color: #f4c95d; }
 
-    .gold-text { color: #f4c95d; font-weight: bold; }
-
-    .section { 
+    .info { 
       background: #112d26; 
-      padding: 30px; 
-      border-radius: 20px; 
-      margin: 25px 0; 
+      padding: 24px; 
+      border-radius: 16px; 
+      margin: 20px 0; 
       border: 1px solid #1f5c4a;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      text-align: left;
     }
 
-    h2 {
-      color: #f4c95d;
-      border-bottom: 2px solid #1f5c4a;
-      padding-bottom: 10px;
-      margin-top: 0;
-      font-size: 1.5em;
-      letter-spacing: 1px;
-    }
-
-    h3 {
-      color: #ebd18a;
-      margin-top: 20px;
-      font-size: 1.2em;
-    }
-
-    p {
-      margin: 15px 0;
-      color: #d1dcd6;
-      text-align: justify;
-    }
-
-    ul {
-      padding-left: 20px;
-      color: #d1dcd6;
-    }
-
-    li {
-      margin-bottom: 12px;
-    }
-
-    .formula {
-      background: #0d241e;
-      padding: 15px;
-      border-radius: 10px;
-      font-family: 'Courier New', Courier, monospace;
-      color: #f4c95d;
+    .balance-display {
+      font-size: 1.8em;
+      font-weight: bold;
       text-align: center;
-      font-weight: bold;
-      border-left: 4px solid #f4c95d;
-      margin: 15px 0;
-      font-size: 1.1em;
+      margin: 10px 0;
+      font-family: monospace;
     }
 
-    .back-btn {
-      display: inline-block;
-      background: #1f5c4a;
-      color: white;
-      text-decoration: none;
-      padding: 12px 25px;
-      border-radius: 10px;
-      font-weight: bold;
+    .button {
+      color: white; 
+      padding: 18px; 
+      border: none;
+      border-radius: 14px; 
+      font-size: 1.1em; 
+      margin: 10px 0; 
+      cursor: pointer;
+      width: 100%; 
+      font-weight: 600; 
+      display: block;
       transition: all 0.3s ease;
-      margin-bottom: 20px;
     }
 
-    .back-btn:hover {
-      background: #2e7d5c;
-      transform: translateY(-2px);
-    }
+    .button:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(244, 201, 93, 0.3); }
+    .button.connect { background: #1f5c4a; }
+    .button.test    { background: linear-gradient(90deg, #f4c95d, #d4a017); color: #0a1f1a; font-weight: bold; }
+    .button.mint    { background: #2e7d5c; }
+    .button.stake   { background: #1f5c4a; }
+    .button.claim   { background: #c94f2e; }
+    .button.whitepaper { background: #8b5e3c; font-weight: bold; }
 
-    footer {
-      margin: 50px 0 20px;
-      opacity: 0.6;
-      font-size: 0.9em;
-      text-align: center;
-    }
+    .hidden { display: none !important; }
   </style>
 </head>
 <body>
   <div class="container">
-    <a href="index.html" class="back-btn">← Back to App</a>
-
     <div class="header">
       <img src="apple-touch-icon.png" alt="Canine Farming Protocol" class="logo">
       <h1>CANINE FARMING</h1>
-      <div class="subtitle">Official Protocol Whitepaper</div>
-      <p style="text-align:center; font-size:0.9em; margin-bottom:0;" class="gold-text">Version 1.1 • Ecosystem Utility Tokenomics</p>
+      <p class="gold-text">Protocol • Sustainable Growth • 10M Max Supply</p>
     </div>
 
-    <!-- Section 1 -->
-    <div class="section">
-      <h2>1. Abstract</h2>
-      <p>The Canine Farming Protocol is a community-first, decentralized simulation application built inside the Pi Network ecosystem. Inspired by the organic, controlled, and sustainable population growth patterns observed in specialized German Shepherd breeding, the protocol introduces a strictly hard-capped utility asset, <span class="gold-text">$CFM</span>, limited to a maximum supply of <span class="gold-text">10,000,000 units</span>.</p>
-      <p>By leveraging the Pi Browser architecture, the platform provides Pioneers with an interactive environment to engage with advanced gamified Proof-of-Stake (PoS) models, fostering non-speculative utility, tokenomics engineering education, and Web3 financial literacy.</p>
-    </div>
-
-    <!-- Section 2 -->
-    <div class="section">
-      <h2>2. Core Protocol Mechanics</h2>
-      <p>To ensure absolute alignment with the Pi Core Team’s developer guidelines, the platform enforces a strict single-entry initialization framework:</p>
-      <ul>
-        <li><span class="gold-text">Ecosystem Activation Fee:</span> A fixed, one-time platform access transaction of <span class="gold-text">0.5 Pi</span> (Test-Pi during the Testnet testing phase) is required to initialize an active node instance. Multi-accounting onboarding loops and duplicate wallet registrations are programmatically blocked by the protocol.</li>
-        <li><span class="gold-text">Baseline Seed Allocation:</span> Upon successful on-chain transaction validation from the Pi SDK, the backend provisions an initial seed balance of exactly <span class="gold-text">0.000025 $CFM</span> directly to the Pioneer's interactive simulation wallet.</li>
-      </ul>
-    </div>
-
-    <!-- Section 3 -->
-    <div class="section">
-      <h2>3. Tokenomics & Asymmetric Supply Squeeze</h2>
-      <p>The total asset matrix of 10,000,000 $CFM tokens is structurally divided to protect the stability and allocation metrics of long-term ecosystem participants:</p>
-      <ul>
-        <li><strong>Initial Active Base Supply:</strong> 0.000025 $CFM × 10,000,000 Max Pioneers = <span class="gold-text">250 $CFM</span>.</li>
-        <li><strong>Unminted Staking Rewards Pool:</strong> <span class="gold-text">9,999,750 $CFM</span>.</li>
-      </ul>
-
-      <h3>Supply Expansion Curve</h3>
-      <p>The system utilizes an automated expansion timeline designed to distribute rewards safely to active, qualified accounts without inducing hyper-inflationary block crashes:</p>
-      <div class="formula">
-        Yearly Expansion = Circulating Supply + 400%
+    <div class="info">
+      <h2>Session Status: <span id="username" class="gold-text">Uninitialized</span></h2>
+      <div id="liveBalanceContainer" class="hidden">
+        <h4 style="margin: 10px 0 0 0; color: #1f5c4a; text-align: center;">Live Staking Simulator</h4>
+        <div id="cfmTicker" class="balance-display gold-text">0.000025000000</div>
       </div>
-      <p>The protocol expands global circulation by 400% annually for the opening lifecycle phases. During the ultimate year of the unminted reward pool's lifespan, the remaining supply undergoes a terminal liquidation adjustment of <span class="gold-text">156%</span> to exhaust the staking reserves fully and transition the app into a fully self-sustaining economy.</p>
+    </div>
+    
+    <button id="connect" class="button connect">Initialize Pi Session</button>
+    <button id="payBtn" class="button test hidden">Activate Simulation Allocation (0.5 Test-Pi)</button>
+    <button id="mintBtn" class="button mint hidden">Claim $CFM Tokens</button>
+    <button id="stakeBtn" class="button stake hidden">Stake $CFM</button>
+    <button id="claimBtn" class="button claim hidden">Harvest Rewards</button>
 
-      <h3>The 1.0 $CFM Hard Anti-Whale Cutoff</h3>
-      <p>To maximize decentralization and prevent systemic wealth concentration, individual wallets are capped at a strict lifetime limitation:</p>
-      <div class="formula">
-        Max Wallet Capacity = 1.00000000 $CFM
-      </div>
-      <p>Because Pioneers activate their farming nodes at entirely different time intervals, reward distribution occurs asynchronously. The moment an individual account balance accumulates to exactly <span class="gold-text">1.0 $CFM</span>, the node is automatically flagged by the protocol and permanently disconnected from the active rewards stream. This preserves the remaining pool blocks specifically for newly arriving Pioneers.</p>
+    <!-- New Whitepaper Button -->
+    <a href="whitepaper.html" target="_blank">
+      <button class="button whitepaper">📄 Read Whitepaper</button>
+    </a>
+
+    <!-- Vision -->
+    <div class="info">
+      <h3 style="color:#f4c95d;">Our Vision</h3>
+      <p>Inspired by the sustainable growth patterns of canine populations, Canine Farming Protocol is a gamified Proof-of-Stake simulation built exclusively for the Pi Network ecosystem.</p>
     </div>
 
-    <!-- Section 4 -->
-    <div class="section">
-      <h2>4. Technical Architecture</h2>
-      <p>Canine Farming Protocol implements a low-overhead, serverless configuration optimized for concurrent global mobile network traffic:</p>
-      <ul>
-        <li><span class="gold-text">Frontend Client:</span> Valid HTML5, custom utility CSS, and native JavaScript paired with the <span class="gold-text">Pi Network JavaScript SDK (v2.0)</span>. Real-time token tickers calculate balances client-side using millisecond interval processing to preserve device resource states.</li>
-        <li><span class="gold-text">Backend Cloud Engine:</span> Stateless Node.js microservices hosted on Vercel's high-speed global edge network.</li>
-        <li><span class="gold-text">Data Layer Optimization:</span> Cloud asset states are preserved via serverless-friendly HTTP REST requests. This structure prevents connection pooling drops or gateway execution timeouts during intensive transactional validation events.</li>
-      </ul>
+    <!-- Roadmap -->
+    <div class="info">
+      <h3 style="color:#f4c95d;">Roadmap</h3>
+      <p><strong>Phase 1:</strong> Testnet Launch & Pioneer Distribution<br>
+         <strong>Phase 2:</strong> Simulation Rewards & Ecosystem Expansion<br>
+         <strong>Phase 3:</strong> Expand Ecosystem Utility & Exchange Listings</p>
     </div>
-
-    <footer>
-      Canine Farming Protocol © 2026 • Built inside the Pi Browser Ecosystem<br>
-      Transparency • Sustainability • Decentralized Utilities
-    </footer>
   </div>
+
+  <footer style="margin:40px 0 20px; opacity:0.6; font-size:0.9em;">
+    Powered by Pi Network • Transparency • Sustainability • Community
+  </footer>
+
+  <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+  
+  <script>
+    Pi.init({ version: "2.0", sandbox: true })
+      .then(() => console.log("✅ Pi SDK Initialized"))
+      .catch(err => console.error("Pi Init Failed:", err));
+  </script>
+
+  <script src="app.js"></script>
 </body>
 </html>
