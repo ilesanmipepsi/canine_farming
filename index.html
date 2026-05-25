@@ -81,8 +81,6 @@
     .button:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(244, 201, 93, 0.3); }
     .button.connect { background: #1f5c4a; }
     .button.test    { background: linear-gradient(90deg, #f4c95d, #d4a017); color: #0a1f1a; font-weight: bold; }
-    .button.mint    { background: #2e7d5c; }
-    .button.stake   { background: #1f5c4a; }
     .button.claim   { background: #c94f2e; }
     
     .button.whitepaper {
@@ -127,9 +125,8 @@
     
     <button id="connect" class="button connect">Initialize Pi Session</button>
     <button id="payBtn" class="button test hidden">Activate Simulation Allocation (0.5 Test-Pi)</button>
-    
-    <!-- Action buttons shown only after "Start Farming Now" -->
-    <button id="stakeBtn" class="button stake hidden">Stake $CFM</button>
+
+    <!-- Main Action Button after activation -->
     <button id="claimBtn" class="button claim hidden">Harvest Rewards</button>
 
     <a href="whitepaper.html" target="_blank" style="text-decoration: none;">
@@ -140,7 +137,7 @@
     <div id="successMessage" class="hidden">
       <h3 style="color: #f4c95d; margin: 0 0 15px 0;">🎉 Activation Successful!</h3>
       <p style="margin: 0 0 20px 0; color: #d1e0d8;">Your farming node is now active.<br>Your rewards have started accumulating in real-time.</p>
-      <button onclick="startFarming()" style="background:#f4c95d; color:#0a1f1a; border:none; padding:14px 32px; border-radius:12px; font-weight:700; cursor:pointer; width:100%;">
+      <button onclick="hideSuccessMessage()" style="background:#f4c95d; color:#0a1f1a; border:none; padding:14px 32px; border-radius:12px; font-weight:700; cursor:pointer; width:100%;">
         Start Farming Now
       </button>
     </div>
@@ -148,13 +145,6 @@
     <div class="info">
       <h3 style="color:#f4c95d;">Our Vision</h3>
       <p>Inspired by the sustainable growth patterns of canine populations, Canine Farming Protocol is a gamified Proof-of-Stake simulation built exclusively for the Pi Network ecosystem.</p>
-    </div>
-
-    <div class="info">
-      <h3 style="color:#f4c95d;">Roadmap</h3>
-      <p><strong>Phase 1:</strong> Testnet Launch & Pioneer Distribution<br>
-         <strong>Phase 2:</strong> Simulation Rewards & Ecosystem Expansion<br>
-         <strong>Phase 3:</strong> Expand Ecosystem Utility & Exchange Listings</p>
     </div>
   </div>
 
