@@ -8,14 +8,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const connectBtn = document.getElementById('connect');
     const payBtn = document.getElementById('payBtn');
-    const mintBtn = document.getElementById('mintBtn');
-    const stakeBtn = document.getElementById('stakeBtn');
-    const claimBtn = document.getElementById('claimBtn');
+    const claimBtn = document.getElementById('claimBtn');   // Kept as main action
 
     // Hide advanced buttons initially
     if (payBtn) payBtn.classList.add('hidden');
-    if (mintBtn) mintBtn.classList.add('hidden');
-    if (stakeBtn) stakeBtn.classList.add('hidden');
     if (claimBtn) claimBtn.classList.add('hidden');
 
     // Initialize Pi Session
@@ -69,14 +65,16 @@ document.addEventListener('DOMContentLoaded', () => {
                             body: JSON.stringify({ paymentId, txid, username: pioneerUsername })
                         }).then(res => {
                             if (res.ok) {
-                                // Show success message
                                 const successMsg = document.getElementById('successMessage');
                                 if (successMsg) successMsg.classList.remove('hidden');
 
-                                // Auto start farming after 2.5 seconds
+                                targetBtn.innerText = originalText;
+                                targetBtn.disabled = false;
+
+                                // Auto-start farming after a short delay
                                 setTimeout(() => {
                                     startFarming();
-                                }, 2500);
+                                }, 1800);
 
                                 return res.json();
                             } else {
@@ -113,6 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (payBtn) payBtn.classList.remove('hidden');
             }
         } catch (err) {
+            console.error("Status check failed:", err);
             if (payBtn) payBtn.classList.remove('hidden');
         }
     }
@@ -121,12 +120,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const successMsg = document.getElementById('successMessage');
         if (successMsg) successMsg.classList.add('hidden');
         
-        // Reveal action buttons
-        if (mintBtn) mintBtn.classList.remove('hidden');
-        if (stakeBtn) stakeBtn.classList.remove('hidden');
+        // Reveal main action button
         if (claimBtn) claimBtn.classList.remove('hidden');
 
         startLiveTicker(0.000025000000);
+    }
+
+    function hideSuccessMessage() {
+        const successMsg = document.getElementById('successMessage');
+        if (successMsg) successMsg.classList.add('hidden');
     }
 
     function startLiveTicker(startingBalance) {
@@ -162,9 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    if (stakeBtn) stakeBtn.onclick = () => handleAction('stake');
     if (claimBtn) claimBtn.onclick = () => handleAction('claim');
-    if (mintBtn) mintBtn.onclick = () => handleAction('swap');
 });
 
 function onIncompletePaymentFound(payment) {
@@ -174,4 +174,4 @@ function onIncompletePaymentFound(payment) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ paymentId: payment.identifier, txid: "AUTO_CLEARED" })
     }).catch(() => {});
-                                    }
+}
