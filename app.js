@@ -120,7 +120,16 @@ document.addEventListener('DOMContentLoaded', () => {
         if (stakeBtn) stakeBtn.classList.remove('hidden');
         if (claimBtn) claimBtn.classList.remove('hidden');
 
+        // Show success message
+        const successMsg = document.getElementById('successMessage');
+        if (successMsg) successMsg.classList.remove('hidden');
+
         startLiveTicker(savedBalance);
+    }
+
+    function hideSuccessMessage() {
+        const successMsg = document.getElementById('successMessage');
+        if (successMsg) successMsg.classList.add('hidden');
     }
 
     function startLiveTicker(startingBalance) {
