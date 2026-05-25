@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // Single-Entry 0.5 Test-Pi Allocation Activation
+    // 0.5 Pi Activation
     if (payBtn) {
         payBtn.onclick = async (e) => {
             const targetBtn = e.target;
@@ -69,12 +69,15 @@ document.addEventListener('DOMContentLoaded', () => {
                             body: JSON.stringify({ paymentId, txid, username: pioneerUsername })
                         }).then(res => {
                             if (res.ok) {
-                                // Show success screen
+                                // Show success message
                                 const successMsg = document.getElementById('successMessage');
                                 if (successMsg) successMsg.classList.remove('hidden');
-                                
-                                targetBtn.innerText = originalText;
-                                targetBtn.disabled = false;
+
+                                // Auto start farming after 2.5 seconds
+                                setTimeout(() => {
+                                    startFarming();
+                                }, 2500);
+
                                 return res.json();
                             } else {
                                 throw new Error("Completion failed");
@@ -105,19 +108,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
 
             if (data.hasActivated) {
-                unlockSimulationFeatures(data.currentCfmBalance || 0.000025);
+                startFarming();
             } else {
                 if (payBtn) payBtn.classList.remove('hidden');
             }
         } catch (err) {
-            console.error("Status check failed:", err);
             if (payBtn) payBtn.classList.remove('hidden');
         }
-    }
-
-    function unlockSimulationFeatures(savedBalance) {
-        if (payBtn) payBtn.classList.add('hidden');
-        startLiveTicker(savedBalance);
     }
 
     function startFarming() {
@@ -128,11 +125,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (mintBtn) mintBtn.classList.remove('hidden');
         if (stakeBtn) stakeBtn.classList.remove('hidden');
         if (claimBtn) claimBtn.classList.remove('hidden');
+
+        startLiveTicker(0.000025000000);
     }
 
     function startLiveTicker(startingBalance) {
         if (tickerInterval) clearInterval(tickerInterval);
-        currentLocalBalance = startingBalance || 0.000025000000;
+        currentLocalBalance = startingBalance;
 
         const liveContainer = document.getElementById('liveBalanceContainer');
         if (liveContainer) liveContainer.classList.remove('hidden');
@@ -175,4 +174,4 @@ function onIncompletePaymentFound(payment) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ paymentId: payment.identifier, txid: "AUTO_CLEARED" })
     }).catch(() => {});
-                    }
+                                    }
