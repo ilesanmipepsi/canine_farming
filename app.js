@@ -69,13 +69,12 @@ document.addEventListener('DOMContentLoaded', () => {
                             body: JSON.stringify({ paymentId, txid, username: pioneerUsername })
                         }).then(res => {
                             if (res.ok) {
-                                // Show beautiful success screen
+                                // Show success screen
                                 const successMsg = document.getElementById('successMessage');
                                 if (successMsg) successMsg.classList.remove('hidden');
                                 
                                 targetBtn.innerText = originalText;
                                 targetBtn.disabled = false;
-                                unlockSimulationFeatures(0.000025000000);
                                 return res.json();
                             } else {
                                 throw new Error("Completion failed");
@@ -118,17 +117,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function unlockSimulationFeatures(savedBalance) {
         if (payBtn) payBtn.classList.add('hidden');
-        
-        if (mintBtn) mintBtn.classList.remove('hidden');
-        if (stakeBtn) stakeBtn.classList.remove('hidden');
-        if (claimBtn) claimBtn.classList.remove('hidden');
-
         startLiveTicker(savedBalance);
     }
 
-    function hideSuccessMessage() {
+    function startFarming() {
         const successMsg = document.getElementById('successMessage');
         if (successMsg) successMsg.classList.add('hidden');
+        
+        // Reveal action buttons
+        if (mintBtn) mintBtn.classList.remove('hidden');
+        if (stakeBtn) stakeBtn.classList.remove('hidden');
+        if (claimBtn) claimBtn.classList.remove('hidden');
     }
 
     function startLiveTicker(startingBalance) {
@@ -176,4 +175,4 @@ function onIncompletePaymentFound(payment) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ paymentId: payment.identifier, txid: "AUTO_CLEARED" })
     }).catch(() => {});
-}
+                    }
