@@ -98,15 +98,6 @@
     }
 
     .hidden { display: none !important; }
-
-    #successMessage {
-      margin: 25px 0; 
-      padding: 30px; 
-      background: linear-gradient(135deg, #1a3f32, #0f2e24); 
-      border-radius: 20px; 
-      border: 2px solid #f4c95d;
-      box-shadow: 0 8px 30px rgba(244, 201, 93, 0.4);
-    }
   </style>
 </head>
 <body>
@@ -135,15 +126,6 @@
       <button class="button whitepaper">📜 Read Official Whitepaper</button>
     </a>
 
-    <!-- Enhanced Success Message -->
-    <div id="successMessage" class="hidden">
-      <h3 style="color: #f4c95d; margin: 0 0 15px 0;">🎉 Activation Successful!</h3>
-      <p style="margin: 0 0 20px 0; color: #d1e0d8;">Your farming node is now active.<br>Your rewards have started accumulating.</p>
-      <button onclick="hideSuccessMessage()" style="background:#f4c95d; color:#0a1f1a; border:none; padding:14px 32px; border-radius:12px; font-weight:700; cursor:pointer; width:100%;">
-        Start Farming Now
-      </button>
-    </div>
-
     <div class="info">
       <h3 style="color:#f4c95d;">Our Vision</h3>
       <p>Inspired by the sustainable growth patterns of canine populations, Canine Farming Protocol is a gamified Proof-of-Stake simulation built exclusively for the Pi Network ecosystem.</p>
@@ -163,8 +145,9 @@
 
   <script src="https://sdk.minepi.com/pi-sdk.js"></script>
   
+  <!-- Pi Init - Must run early -->
   <script>
-    Pi.init({ version: "2.0", sandbox: true })
+    window.Pi.init({ version: "2.0", sandbox: true })
       .then(() => console.log("✅ Pi SDK Initialized"))
       .catch(err => console.error("Pi Init Failed:", err));
   </script>
