@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const connectBtn = document.getElementById('connect');
     const payBtn = document.getElementById('payBtn');
-    const claimBtn = document.getElementById('claimBtn');   // Kept as main action
+    const claimBtn = document.getElementById('claimBtn');
 
     // Hide advanced buttons initially
     if (payBtn) payBtn.classList.add('hidden');
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // 0.5 Pi Activation
+    // Single-Entry 0.5 Test-Pi Allocation Activation
     if (payBtn) {
         payBtn.onclick = async (e) => {
             const targetBtn = e.target;
@@ -65,17 +65,13 @@ document.addEventListener('DOMContentLoaded', () => {
                             body: JSON.stringify({ paymentId, txid, username: pioneerUsername })
                         }).then(res => {
                             if (res.ok) {
+                                // Show beautiful success screen
                                 const successMsg = document.getElementById('successMessage');
                                 if (successMsg) successMsg.classList.remove('hidden');
-
+                                
                                 targetBtn.innerText = originalText;
                                 targetBtn.disabled = false;
-
-                                // Auto-start farming after a short delay
-                                setTimeout(() => {
-                                    startFarming();
-                                }, 1800);
-
+                                unlockSimulationFeatures(0.000025000000);
                                 return res.json();
                             } else {
                                 throw new Error("Completion failed");
@@ -106,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
 
             if (data.hasActivated) {
-                startFarming();
+                unlockSimulationFeatures(data.currentCfmBalance || 0.000025);
             } else {
                 if (payBtn) payBtn.classList.remove('hidden');
             }
@@ -116,14 +112,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function startFarming() {
-        const successMsg = document.getElementById('successMessage');
-        if (successMsg) successMsg.classList.add('hidden');
-        
-        // Reveal main action button
+    function unlockSimulationFeatures(savedBalance) {
+        if (payBtn) payBtn.classList.add('hidden');
         if (claimBtn) claimBtn.classList.remove('hidden');
 
-        startLiveTicker(0.000025000000);
+        startLiveTicker(savedBalance);
     }
 
     function hideSuccessMessage() {
@@ -133,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function startLiveTicker(startingBalance) {
         if (tickerInterval) clearInterval(tickerInterval);
-        currentLocalBalance = startingBalance;
+        currentLocalBalance = startingBalance || 0.000025000000;
 
         const liveContainer = document.getElementById('liveBalanceContainer');
         if (liveContainer) liveContainer.classList.remove('hidden');
