@@ -69,7 +69,10 @@ document.addEventListener('DOMContentLoaded', () => {
                             body: JSON.stringify({ paymentId, txid, username: pioneerUsername })
                         }).then(res => {
                             if (res.ok) {
-                                alert('🚀 Simulation Allocation Activated Successfully!');
+                                // Show beautiful success screen
+                                const successMsg = document.getElementById('successMessage');
+                                if (successMsg) successMsg.classList.remove('hidden');
+                                
                                 targetBtn.innerText = originalText;
                                 targetBtn.disabled = false;
                                 unlockSimulationFeatures(0.000025000000);
@@ -119,10 +122,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (mintBtn) mintBtn.classList.remove('hidden');
         if (stakeBtn) stakeBtn.classList.remove('hidden');
         if (claimBtn) claimBtn.classList.remove('hidden');
-
-        // Show success message
-        const successMsg = document.getElementById('successMessage');
-        if (successMsg) successMsg.classList.remove('hidden');
 
         startLiveTicker(savedBalance);
     }
