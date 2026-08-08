@@ -57,11 +57,12 @@
     }
 
     .balance-display {
-      font-size: 1.8em;
+      font-size: 1.85em;
       font-weight: bold;
       text-align: center;
-      margin: 10px 0;
+      margin: 12px 0;
       font-family: monospace;
+      letter-spacing: 1px;
     }
 
     .button {
@@ -81,24 +82,44 @@
     .button:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(244, 201, 93, 0.3); }
     .button.connect { background: #1f5c4a; }
     .button.test    { background: linear-gradient(90deg, #f4c95d, #d4a017); color: #0a1f1a; font-weight: bold; }
-    .button.mint    { background: #2e7d5c; }
-    .button.stake   { background: #1f5c4a; }
     .button.claim   { background: #c94f2e; }
     
-    /* Improved Whitepaper Button */
     .button.whitepaper {
       background: linear-gradient(135deg, #8b5e3c, #c19a6b);
       color: white;
       font-weight: 700;
       border: 2px solid #f4c95d;
-      box-shadow: 0 4px 15px rgba(244, 201, 93, 0.3);
     }
-    .button.whitepaper:hover {
+    .button.landing {
+      background: #2e7d5c;
+    }
+    .button.whitepaper:hover, .button.landing:hover {
       transform: translateY(-4px);
       box-shadow: 0 8px 25px rgba(244, 201, 93, 0.5);
     }
 
     .hidden { display: none !important; }
+
+    #successMessage {
+      margin: 25px 0; 
+      padding: 35px 28px; 
+      background: linear-gradient(135deg, #1a3f32, #0f2e24); 
+      border-radius: 22px; 
+      border: 2px solid #f4c95d;
+      box-shadow: 0 12px 35px rgba(244, 201, 93, 0.45);
+    }
+
+    #successMessage h3 {
+      color: #f4c95d;
+      margin: 0 0 14px 0;
+      font-size: 1.5em;
+    }
+
+    #successMessage p {
+      margin: 0 0 24px 0;
+      color: #d1e0d8;
+      font-size: 1.05em;
+    }
   </style>
 </head>
 <body>
@@ -119,27 +140,32 @@
     
     <button id="connect" class="button connect">Initialize Pi Session</button>
     <button id="payBtn" class="button test hidden">Activate Simulation Allocation (0.5 Test-Pi)</button>
-    <button id="mintBtn" class="button mint hidden">Claim $CFM Tokens</button>
-    <button id="stakeBtn" class="button stake hidden">Stake $CFM</button>
+
     <button id="claimBtn" class="button claim hidden">Harvest Rewards</button>
 
-    <!-- Premium Whitepaper Button -->
     <a href="whitepaper.html" target="_blank" style="text-decoration: none;">
       <button class="button whitepaper">📜 Read Official Whitepaper</button>
     </a>
-        <a href="landing.html" target="_blank" style="text-decoration: none;">
-  <button class="button" style="background: #2e7d5c; margin-top: 8px;">
-    🌐 View Marketing Page
-  </button>
-        </a>
 
-    <!-- Vision -->
+    <a href="landing.html" target="_blank" style="text-decoration: none;">
+      <button class="button landing">🌐 View Marketing Page</button>
+    </a>
+
+    <!-- Enhanced Success Message -->
+    <div id="successMessage" class="hidden">
+      <h3>🎉 Activation Successful!</h3>
+      <p>Your farming node is now active.<br>
+      Rewards are accumulating in real-time.</p>
+      <button onclick="hideSuccessMessage()" style="background:#f4c95d; color:#0a1f1a; border:none; padding:16px 32px; border-radius:14px; font-weight:700; cursor:pointer; width:100%; font-size:1.05em;">
+        Start Farming Now
+      </button>
+    </div>
+
     <div class="info">
       <h3 style="color:#f4c95d;">Our Vision</h3>
       <p>Inspired by the sustainable growth patterns of canine populations, Canine Farming Protocol is a gamified Proof-of-Stake simulation built exclusively for the Pi Network ecosystem.</p>
     </div>
 
-    <!-- Roadmap -->
     <div class="info">
       <h3 style="color:#f4c95d;">Roadmap</h3>
       <p><strong>Phase 1:</strong> Testnet Launch & Pioneer Distribution<br>
@@ -162,4 +188,4 @@
 
   <script src="app.js"></script>
 </body>
-</html>
+      </html>
