@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Canine Farming Protocol</title>
+  <title>Canine Farming Protocol – Official Landing Page</title>
   
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -15,16 +15,23 @@
       color: #e8e8e8; 
       margin: 0; 
       padding: 0;
+      line-height: 1.7;
     }
-    .container { max-width: 480px; margin: 0 auto; padding: 40px 20px; text-align: center; }
+    .container { 
+      max-width: 520px; 
+      margin: 0 auto; 
+      padding: 40px 20px; 
+      text-align: center; 
+    }
 
     .header {
       background: linear-gradient(135deg, #0f2e24, #1a3f32);
       color: white;
-      padding: 60px 30px;
+      padding: 60px 30px 50px;
       border-radius: 28px;
       margin-bottom: 40px;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.7);
+      box-shadow: 0 15px 45px rgba(0,0,0,0.7);
+      border: 1px solid #1f5c4a;
     }
 
     .logo {
@@ -37,49 +44,83 @@
     }
 
     h1 {
-      font-size: 2.8em;
+      font-size: 2.7em;
       color: #f4c95d;
       letter-spacing: 4px;
       margin: 0 0 12px 0;
     }
 
     .tagline {
-      font-size: 1.3em;
+      font-size: 1.25em;
       color: #d1e0d8;
-      margin-bottom: 30px;
+      margin-bottom: 35px;
+      font-weight: 500;
     }
 
     .cta-button {
       background: linear-gradient(135deg, #f4c95d, #d4a017);
       color: #0a1f1a;
       font-weight: 700;
-      padding: 18px 40px;
+      padding: 18px 36px;
       border-radius: 16px;
-      font-size: 1.2em;
+      font-size: 1.15em;
       text-decoration: none;
       display: inline-block;
-      margin: 15px 0;
+      margin: 10px 8px;
       box-shadow: 0 8px 25px rgba(244, 201, 93, 0.4);
       transition: all 0.3s ease;
+      min-width: 180px;
+    }
+
+    .cta-button.secondary {
+      background: linear-gradient(135deg, #8b5e3c, #c19a6b);
+      color: white;
     }
 
     .cta-button:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 12px 30px rgba(244, 201, 93, 0.6);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(244, 201, 93, 0.55);
     }
 
     .section {
       background: #112d26;
-      padding: 30px;
+      padding: 32px 28px;
       border-radius: 20px;
       margin: 30px 0;
       text-align: left;
+      border: 1px solid #1f5c4a;
+    }
+
+    .section h2 {
+      color: #f4c95d;
+      text-align: center;
+      margin-top: 0;
+      font-size: 1.6em;
+    }
+
+    .section p, .section li {
+      color: #d1dcd6;
+      font-size: 1.05em;
+    }
+
+    ul {
+      padding-left: 22px;
+    }
+
+    li {
+      margin-bottom: 12px;
+    }
+
+    .highlight {
+      color: #f4c95d;
+      font-weight: 600;
     }
 
     footer {
       margin-top: 60px;
-      opacity: 0.7;
+      opacity: 0.75;
       font-size: 0.95em;
+      text-align: center;
     }
   </style>
 </head>
@@ -88,30 +129,38 @@
     <div class="header">
       <img src="apple-touch-icon.png" alt="Canine Farming Protocol" class="logo">
       <h1>CANINE FARMING</h1>
-      <p class="tagline">Sustainable Growth • 10M Max Supply</p>
+      <p class="tagline">Sustainable Growth • 10 Million Max Supply</p>
       
       <a href="index.html" class="cta-button">Launch App →</a>
-      <a href="whitepaper.html" class="cta-button" style="background:#8b5e3c; color:white;">Read Whitepaper</a>
+      <a href="whitepaper.html" class="cta-button secondary">Read Whitepaper</a>
     </div>
 
     <div class="section">
-      <h2 style="color:#f4c95d; text-align:center;">Why Canine Farming?</h2>
-      <p>A fair, educational Proof-of-Stake simulation inspired by real sustainable population growth. One-time activation. Real-time rewards. Strict anti-whale rules.</p>
+      <h2>Why Canine Farming?</h2>
+      <p>A fair, educational <span class="highlight">Proof-of-Stake simulation</span> inspired by the real sustainable growth patterns of German Shepherd populations.</p>
+      <p>One-time activation. Real-time rewards. Strict anti-whale rules. Transparent tokenomics.</p>
     </div>
 
     <div class="section">
-      <h2 style="color:#f4c95d; text-align:center;">Key Features</h2>
-      <ul style="color:#d1e0d8;">
-        <li>0.5 Pi single entry activation</li>
-        <li>Live staking simulator</li>
-        <li>10 Million hard supply cap</li>
-        <li>Maximum 1.0 $CFM per wallet</li>
+      <h2>Key Features</h2>
+      <ul>
+        <li><strong>0.5 Pi</strong> single-entry activation</li>
+        <li>Live staking simulator with real-time balance</li>
+        <li><strong>10,000,000 $CFM</strong> hard supply cap</li>
+        <li>Maximum <strong>1.0 $CFM</strong> per wallet (anti-whale protection)</li>
+        <li>Educational tokenomics designed for the Pi ecosystem</li>
       </ul>
     </div>
 
+    <div class="section">
+      <h2>Built for Pi Network</h2>
+      <p>Canine Farming Protocol is designed exclusively for the Pi Browser environment. It follows official Pi SDK standards, prioritizes fairness, transparency, and long-term sustainability.</p>
+    </div>
+
     <footer>
-      Built for the Pi Network Ecosystem • Transparency First
+      Canine Farming Protocol © 2026<br>
+      Transparency • Sustainability • Community
     </footer>
   </div>
 </body>
-</html>
+  </html>
