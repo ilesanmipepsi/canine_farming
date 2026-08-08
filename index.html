@@ -115,18 +115,6 @@
       border: 2px solid #f4c95d;
       box-shadow: 0 12px 35px rgba(244, 201, 93, 0.45);
     }
-
-    #successMessage h3 {
-      color: #f4c95d;
-      margin: 0 0 14px 0;
-      font-size: 1.5em;
-    }
-
-    #successMessage p {
-      margin: 0 0 24px 0;
-      color: #d1e0d8;
-      font-size: 1.05em;
-    }
   </style>
 </head>
 <body>
@@ -159,11 +147,9 @@
       <button class="button landing">🌐 View Marketing Page</button>
     </a>
 
-    <!-- Enhanced Success Message -->
     <div id="successMessage" class="hidden">
-      <h3>🎉 Activation Successful!</h3>
-      <p>Your farming node is now active.<br>
-      Rewards are accumulating in real-time.</p>
+      <h3 style="color: #f4c95d; margin: 0 0 14px 0;">🎉 Activation Successful!</h3>
+      <p style="margin: 0 0 24px 0; color: #d1e0d8;">Your farming node is now active.<br>Rewards are accumulating in real-time.</p>
       <button onclick="hideSuccessMessage()" style="background:#f4c95d; color:#0a1f1a; border:none; padding:16px 32px; border-radius:14px; font-weight:700; cursor:pointer; width:100%; font-size:1.05em;">
         Start Farming Now
       </button>
