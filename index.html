@@ -60,9 +60,16 @@
       font-size: 1.85em;
       font-weight: bold;
       text-align: center;
-      margin: 12px 0;
+      margin: 12px 0 6px;
       font-family: monospace;
       letter-spacing: 1px;
+    }
+
+    .last-harvested {
+      text-align: center;
+      font-size: 0.9em;
+      color: #8ab9a8;
+      margin-bottom: 8px;
     }
 
     .button {
@@ -135,6 +142,7 @@
       <div id="liveBalanceContainer" class="hidden">
         <h4 style="margin: 10px 0 0 0; color: #1f5c4a; text-align: center;">Live Staking Simulator</h4>
         <div id="cfmTicker" class="balance-display gold-text">0.000025000000</div>
+        <div id="lastHarvested" class="last-harvested">Last harvested: Never</div>
       </div>
     </div>
     
@@ -188,4 +196,4 @@
 
   <script src="app.js"></script>
 </body>
-      </html>
+</html>
