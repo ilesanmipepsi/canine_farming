@@ -8,17 +8,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const connectBtn = document.getElementById('connect');
     const payBtn = document.getElementById('payBtn');
-    const mintBtn = document.getElementById('mintBtn');
-    const stakeBtn = document.getElementById('stakeBtn');
     const claimBtn = document.getElementById('claimBtn');
 
-    // Hide advanced buttons initially
     if (payBtn) payBtn.classList.add('hidden');
-    if (mintBtn) mintBtn.classList.add('hidden');
-    if (stakeBtn) stakeBtn.classList.add('hidden');
     if (claimBtn) claimBtn.classList.add('hidden');
 
-    // Initialize Pi Session
     if (connectBtn) {
         connectBtn.onclick = async () => {
             try {
@@ -41,7 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // Single-Entry 0.5 Test-Pi Allocation Activation
     if (payBtn) {
         payBtn.onclick = async (e) => {
             const targetBtn = e.target;
@@ -69,7 +62,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             body: JSON.stringify({ paymentId, txid, username: pioneerUsername })
                         }).then(res => {
                             if (res.ok) {
-                                alert('🚀 Simulation Allocation Activated Successfully!');
+                                const successMsg = document.getElementById('successMessage');
+                                if (successMsg) successMsg.classList.remove('hidden');
+                                
                                 targetBtn.innerText = originalText;
                                 targetBtn.disabled = false;
                                 unlockSimulationFeatures(0.000025000000);
@@ -115,12 +110,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function unlockSimulationFeatures(savedBalance) {
         if (payBtn) payBtn.classList.add('hidden');
-        
-        if (mintBtn) mintBtn.classList.remove('hidden');
-        if (stakeBtn) stakeBtn.classList.remove('hidden');
         if (claimBtn) claimBtn.classList.remove('hidden');
 
         startLiveTicker(savedBalance);
+    }
+
+    function hideSuccessMessage() {
+        const successMsg = document.getElementById('successMessage');
+        if (successMsg) successMsg.classList.add('hidden');
     }
 
     function startLiveTicker(startingBalance) {
@@ -150,15 +147,32 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({ username: pioneerUsername })
             });
             const data = await res.json();
-            alert(data.message || 'Action completed successfully');
+
+            if (endpoint === 'claim') {
+                // Update Last Harvested time
+                const now = new Date();
+                const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                const lastHarvestedEl = document.getElementById('lastHarvested');
+                if (lastHarvestedEl) {
+                    lastHarvestedEl.innerText = `Last harvested: ${timeString}`;
+                }
+
+                alert('🌾 Harvest Successful!\n\nYour rewards have been logged.\nKeep farming to grow your balance.');
+                
+                // Small visual boost
+                currentLocalBalance += 0.0000005;
+                const tickerEl = document.getElementById('cfmTicker');
+                if (tickerEl) tickerEl.innerText = currentLocalBalance.toFixed(12);
+            } else {
+                alert(data.message || 'Action completed successfully');
+            }
+
         } catch (err) {
             alert("Protocol Error: " + err.message);
         }
     }
 
-    if (stakeBtn) stakeBtn.onclick = () => handleAction('stake');
     if (claimBtn) claimBtn.onclick = () => handleAction('claim');
-    if (mintBtn) mintBtn.onclick = () => handleAction('swap');
 });
 
 function onIncompletePaymentFound(payment) {
@@ -168,4 +182,4 @@ function onIncompletePaymentFound(payment) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ paymentId: payment.identifier, txid: "AUTO_CLEARED" })
     }).catch(() => {});
-}
+                }
