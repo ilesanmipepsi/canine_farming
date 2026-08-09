@@ -10,11 +10,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const payBtn = document.getElementById('payBtn');
     const claimBtn = document.getElementById('claimBtn');
 
-    // Hide advanced buttons initially
     if (payBtn) payBtn.classList.add('hidden');
     if (claimBtn) claimBtn.classList.add('hidden');
 
-    // Initialize Pi Session
     if (connectBtn) {
         connectBtn.onclick = async () => {
             try {
@@ -37,7 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // Single-Entry 0.5 Test-Pi Allocation Activation
     if (payBtn) {
         payBtn.onclick = async (e) => {
             const targetBtn = e.target;
@@ -65,10 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             body: JSON.stringify({ paymentId, txid, username: pioneerUsername })
                         }).then(res => {
                             if (res.ok) {
-                                // Show beautiful success screen
-                                const successMsg = document.getElementById('successMessage');
-                                if (successMsg) successMsg.classList.remove('hidden');
-                                
+                                showSuccessMessage();
                                 targetBtn.innerText = originalText;
                                 targetBtn.disabled = false;
                                 unlockSimulationFeatures(0.000025000000);
@@ -115,13 +109,18 @@ document.addEventListener('DOMContentLoaded', () => {
     function unlockSimulationFeatures(savedBalance) {
         if (payBtn) payBtn.classList.add('hidden');
         if (claimBtn) claimBtn.classList.remove('hidden');
-
         startLiveTicker(savedBalance);
     }
 
-    function hideSuccessMessage() {
+    function showSuccessMessage() {
         const successMsg = document.getElementById('successMessage');
-        if (successMsg) successMsg.classList.add('hidden');
+        if (successMsg) {
+            successMsg.classList.remove('hidden');
+            // Auto-hide after 4.5 seconds
+            setTimeout(() => {
+                successMsg.classList.add('hidden');
+            }, 4500);
+        }
     }
 
     function startLiveTicker(startingBalance) {
@@ -151,7 +150,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({ username: pioneerUsername })
             });
             const data = await res.json();
-            alert(data.message || 'Action completed successfully');
+
+            if (endpoint === 'claim') {
+                const now = new Date();
+                const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                const lastHarvestedEl = document.getElementById('lastHarvested');
+                if (lastHarvestedEl) {
+                    lastHarvestedEl.innerText = `Last harvested: ${timeString}`;
+                }
+
+                alert('🌾 Harvest Successful!\n\nYour rewards have been logged.\nKeep farming to grow your balance.');
+                
+                currentLocalBalance += 0.0000005;
+                const tickerEl = document.getElementById('cfmTicker');
+                if (tickerEl) tickerEl.innerText = currentLocalBalance.toFixed(12);
+            } else {
+                alert(data.message || 'Action completed successfully');
+            }
+
         } catch (err) {
             alert("Protocol Error: " + err.message);
         }
@@ -167,4 +183,4 @@ function onIncompletePaymentFound(payment) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ paymentId: payment.identifier, txid: "AUTO_CLEARED" })
     }).catch(() => {});
-}
+                }
